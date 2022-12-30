@@ -27,6 +27,7 @@ private val logger = KotlinLogging.logger {}
  * @param mapper configured deserializer
  *
  * TODO exception handling
+ * TODO conversion to recognized units (i.e. joules to M3 for NG)
  */
 class UnRestApi(private val http: HttpClient, private val mapper: XmlMapper) {
 
@@ -36,7 +37,7 @@ class UnRestApi(private val http: HttpClient, private val mapper: XmlMapper) {
         dataDimensions: Set<DataDimension>,
         startDate: LocalDate,
         endDate: LocalDate
-    ): List<CommodityDataPoint> {
+    ): Set<CommodityDataPoint> {
         val url = Substitutions.makeString(
             URL_TEMPLATE,
             mapOf(
@@ -59,7 +60,7 @@ class UnRestApi(private val http: HttpClient, private val mapper: XmlMapper) {
 
         val tree = mapper.readTree(response.bodyAsText())
 
-        val result = mutableListOf<CommodityDataPoint>()
+        val result = mutableSetOf<CommodityDataPoint>()
 
         tree["DataSet"]["Series"].forEach { series ->
             val refData = series["SeriesKey"]["Value"]

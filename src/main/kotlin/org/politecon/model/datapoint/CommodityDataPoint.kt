@@ -15,9 +15,7 @@ class CommodityDataPoint {
     lateinit var value: DataPointValue<Double>
 
     fun valid() = true // FIXME
-    fun toMatrix(): Array<Array<String>> {
-        TODO()
-    }
+    fun naturalKey() = "${commodityDimension.commodity}-${commodityDimension.dimension}-$country-$source-$timeFrame"
 
     override fun toString(): String {
         return "CommodityDataPoint(timeFrame='$timeFrame', country=$country, source='$source', commodityDimension=$commodityDimension, value=$value)"
