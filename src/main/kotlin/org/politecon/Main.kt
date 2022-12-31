@@ -20,7 +20,6 @@ private val logger = KotlinLogging.logger {}
  * Starting point for application
  *
  * TODO add DI
- * TODO add Application support
  */
 fun main() {
     val http = HttpClient(CIO)
