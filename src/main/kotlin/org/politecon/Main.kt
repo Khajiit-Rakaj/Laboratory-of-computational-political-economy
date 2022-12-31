@@ -22,6 +22,9 @@ private val logger = KotlinLogging.logger {}
  * TODO add DI
  */
 fun main() {
+
+    printBanner()
+
     val http = HttpClient(CIO)
     val xmlMapper = XmlMapper()
 
@@ -52,7 +55,11 @@ fun main() {
     logger.info("Application finished in $elapsed ms")
 }
 
+private fun printBanner() {
+    logger.info("\n" + getResourceAsText("/banner.txt"))
+}
 
+fun getResourceAsText(path: String): String? = object {}.javaClass.getResource(path)?.readText()
 
 
 
