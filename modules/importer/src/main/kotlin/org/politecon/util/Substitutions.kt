@@ -9,7 +9,7 @@ import java.util.regex.Pattern
  * usage: makeString("\${a} # \${b} @ \${c}", mapOf("a" to 123, "c" to "xyz"))   // => "123 # ??? @ xyz"
  */
 object Substitutions {
-    private val pattern = Pattern.compile("#\\{([^}]+)\\}")
+    private val pattern = Pattern.compile("#\\{([^}]+)}")
 
     fun makeString(
         template: String,
