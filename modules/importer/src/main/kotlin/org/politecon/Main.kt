@@ -11,6 +11,7 @@ import org.politecon.model.DataDimension
 import org.politecon.model.datapoint.CommodityDataPoint
 import org.politecon.persist.Storage
 import org.politecon.sourceadapter.UnRestApi
+import org.politecon.util.getResourceAsText
 import java.time.LocalDate
 import kotlin.system.measureTimeMillis
 
@@ -58,8 +59,6 @@ fun main() {
 private fun printBanner() {
     logger.info("\n" + getResourceAsText("/banner.txt"))
 }
-
-fun getResourceAsText(path: String): String? = object {}.javaClass.getResource(path)?.readText()
 
 
 

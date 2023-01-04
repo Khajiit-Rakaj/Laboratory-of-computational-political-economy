@@ -14,7 +14,6 @@ import org.politecon.model.datapoint.CommodityDimension
 import org.politecon.model.datapoint.DataPointValue
 import org.politecon.util.Substitutions
 import java.time.LocalDate
-import kotlin.system.measureNanoTime
 import kotlin.system.measureTimeMillis
 
 
@@ -58,36 +57,45 @@ class UnRestApi(private val http: HttpClient, private val mapper: XmlMapper) {
 
         logger.info { "Call finished with status ${response.status} in $apiTime ms" }
 
-        val tree = mapper.readTree(response.bodyAsText())
+        // Компилятор ругается если вызывается не корутина способная кидать исключения
+        val tree = runCatching { mapper.readTree(response.bodyAsText()) }.getOrNull()
 
         val result = mutableSetOf<CommodityDataPoint>()
+        if (tree == null) {
+            logger.error { "Failed to parse xml into tree" }
+        } else {
 
-        tree["DataSet"]["Series"].forEach { series ->
-            val refData = series["SeriesKey"]["Value"]
 
-            val countryCode = refData.first { it["id"].textValue() == "REF_AREA" }["value"].textValue()
-            val subjectCode = refData.first { it["id"].textValue() == "COMMODITY" }["value"].textValue()
-            val dimensionCode = refData.first { it["id"].textValue() == "TRANSACTION" }["value"].textValue()
+            tree["DataSet"]["Series"].forEach { series ->
+                val refData = series["SeriesKey"]["Value"]
 
-            val unitCode = series["Attributes"]["Value"]["value"].textValue()
+                val countryCode = refData.first { it["id"].textValue() == "REF_AREA" }["value"].textValue()
+                val subjectCode = refData.first { it["id"].textValue() == "COMMODITY" }["value"].textValue()
+                val dimensionCode = refData.first { it["id"].textValue() == "TRANSACTION" }["value"].textValue()
 
-            series["Obs"].forEach {
+                val unitCode = series["Attributes"]["Value"]["value"].textValue()
 
-                val dataValue = UNIT_MAPPER[unitCode]?.invoke(it["ObsValue"]["value"].textValue())
-                val date = it["ObsDimension"]["value"].textValue()
+                series["Obs"].forEach {
 
-                val dataPoint = CommodityDataPoint.create {
-                    source = SOURCE_NAME
-                    country = REVERSE_COUNTRY_MAP[countryCode]!!
-                    commodityDimension = CommodityDimension(commodity = REVERSE_SUBJECT_MAP[subjectCode]!!, dimension = REVERSE_DATA_DIMENSION_MAP[dimensionCode]!!)
-                    value = dataValue!!
-                    timeFrame = date
+                    val dataValue = UNIT_MAPPER[unitCode]?.invoke(it["ObsValue"]["value"].textValue())
+                    val date = it["ObsDimension"]["value"].textValue()
+
+                    val dataPoint = CommodityDataPoint.create {
+                        source = SOURCE_NAME
+                        country = REVERSE_COUNTRY_MAP[countryCode]!!
+                        commodityDimension = CommodityDimension(
+                            commodity = REVERSE_SUBJECT_MAP[subjectCode]!!,
+                            dimension = REVERSE_DATA_DIMENSION_MAP[dimensionCode]!!
+                        )
+                        value = dataValue!!
+                        timeFrame = date
+                    }
+
+                    // TODO validate data point
+                    result.add(dataPoint)
                 }
 
-                // TODO validate data point
-                result.add(dataPoint)
             }
-
         }
 
         return result
@@ -139,7 +147,7 @@ class UnRestApi(private val http: HttpClient, private val mapper: XmlMapper) {
 
         private val REVERSE_DATA_DIMENSION_MAP = DATA_DIMENSION_MAP.entries.associate { (key, value) -> value to key }
 
-        private val UNIT_MAPPER= mapOf(
+        private val UNIT_MAPPER = mapOf(
             "TJ" to { value: String -> DataPointValue(value.toDouble() * 1000000000000, Units.JOULES) }
         )
     }
