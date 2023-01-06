@@ -3,8 +3,7 @@ package org.politecon.persist
 import com.couchbase.client.kotlin.Cluster
 import com.couchbase.client.kotlin.query.execute
 import mu.KotlinLogging
-import org.politecon.model.datapoint.CommodityDataPoint
-import kotlin.reflect.KClass
+import org.politecon.model.datapoint.BaseDataPoint
 import kotlin.time.Duration.Companion.seconds
 
 private val logger = KotlinLogging.logger {}
@@ -35,29 +34,26 @@ class Storage {
     private val scope = bucket.scope(scopeName)
 
     /**
-     * Persists commodity data points to database
+     * Persists data to database
      */
-    suspend fun store(dataPoints: Set<CommodityDataPoint>) {
+    suspend fun store(dbCollection: DbCollection, dataPoints: Set<BaseDataPoint>) {
         ensureClusterReady()
-
-        cluster.waitUntilReady(1.seconds)
-        val collection = scope.collection(collectionNames[CommodityDataPoint::class]!!)
 
         logger.info { "Persisting ${dataPoints.size} data points to database" }
         dataPoints.forEach {
+            val collection = scope.collection(dbCollection.collectionName)
             collection.upsert(id = it.naturalKey(), content = it)
         }
     }
 
     /**
-     * FIXME test only
+     * Fetches data of certain type
      */
-    internal suspend inline fun <reified T>getSlice(limit: Int = 10):Set<T> {
+    internal suspend inline fun <reified T>get(collection: DbCollection, limit: Int = 10):Set<T> {
         ensureClusterReady()
-        val collectionName = collectionNames[T::class]!!
 
         val query = scope.query(
-            statement = "select d.* from $collectionName d limit $limit",
+            statement = "select d.* from ${collection.collectionName} d limit $limit",
             adhoc = false
         )
 
@@ -75,7 +71,5 @@ class Storage {
         cluster.waitUntilReady(5.seconds)
     }
 
-    private val collectionNames:Map<KClass<*>, String> = mapOf(
-        CommodityDataPoint::class to "datapoints"
-    )
+    private val defaultCollectionName = "_default"
 }
