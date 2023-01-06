@@ -39,6 +39,8 @@ dependencies {
 
     implementation("com.couchbase.client:kotlin-client:$couchBaseVersion")
 
+    implementation("com.neovisionaries:nv-i18n:1.29")
+
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.7.22")
 }
 
