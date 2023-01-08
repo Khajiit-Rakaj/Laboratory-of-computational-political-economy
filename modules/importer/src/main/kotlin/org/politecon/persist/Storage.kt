@@ -2,8 +2,16 @@ package org.politecon.persist
 
 import com.couchbase.client.kotlin.Cluster
 import com.couchbase.client.kotlin.query.execute
+import com.fasterxml.jackson.databind.JsonNode
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.node.ObjectNode
+import com.google.common.hash.HashFunction
+import com.google.common.hash.Hasher
+import com.google.common.hash.Hashing
 import mu.KotlinLogging
 import org.politecon.model.datapoint.BaseDataPoint
+import java.nio.charset.Charset
+import java.util.*
 import kotlin.time.Duration.Companion.seconds
 
 private val logger = KotlinLogging.logger {}
@@ -16,7 +24,7 @@ private val logger = KotlinLogging.logger {}
  * TODO Externalize properties
  * TODO Make singleton
  */
-class Storage {
+class Storage(val objectMapper: ObjectMapper, val hasher: HashFunction) {
     private val url = "couchbase://127.0.0.1"
     private val username = "politecon"
     private val password = "politecon"
@@ -47,6 +55,21 @@ class Storage {
     }
 
     /**
+     * Сохраняет нетипизированные документы в базу данных
+     */
+    suspend fun storeDocuments(dbCollection: DbCollection, dataPoints: Set<ObjectNode>) {
+        ensureClusterReady()
+
+        logger.info { "Сохранятся ${dataPoints.size} документов в базу данных" }
+
+        dataPoints.forEach {
+            val collection = scope.collection(dbCollection.collectionName)
+            val objectHash = hasher.hashString(objectMapper.writeValueAsString(it), Charset.defaultCharset()).toString()
+            collection.upsert(id = objectHash, content = it)
+        }
+    }
+
+    /**
      * Fetches data of certain type
      */
     internal suspend inline fun <reified T>get(collection: DbCollection, limit: Int = 10):Set<T> {
@@ -70,6 +93,7 @@ class Storage {
     private suspend fun ensureClusterReady() {
         cluster.waitUntilReady(5.seconds)
     }
+
 
     private val defaultCollectionName = "_default"
 }
