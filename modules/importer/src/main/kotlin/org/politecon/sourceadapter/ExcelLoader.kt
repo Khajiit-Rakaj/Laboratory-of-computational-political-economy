@@ -1,6 +1,5 @@
 package org.politecon.sourceadapter
 
-import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
 import mu.KotlinLogging
@@ -32,7 +31,7 @@ class ExcelLoader(private val mapper: ObjectMapper) {
             // Названия колонок
             val keys = headerRow.map { it.stringCellValue.lowercase().replace(" ", "_") }
 
-            for (rowIndex in 1..currentSheet.lastRowNum) {
+            for (rowIndex in 1 until currentSheet.lastRowNum) {
                 logger.info { "Обрабатывается ряд $rowIndex (${currentSheet.sheetName})" }
 
                 val dataPoint = mapper.createObjectNode()
@@ -43,7 +42,7 @@ class ExcelLoader(private val mapper: ObjectMapper) {
                 row.forEachIndexed { index, cell ->
 
                     // Если ячейка - формула, нужно развернуть тип и использовать кэшированое значение
-                    when (if(cell.cellType == CellType.FORMULA) cell.cachedFormulaResultType else cell.cellType) {
+                    when (if (cell.cellType == CellType.FORMULA) cell.cachedFormulaResultType else cell.cellType) {
                         CellType.BLANK -> dataPoint.put(keys[index], "")
                         CellType.STRING -> dataPoint.put(keys[index], cell.stringCellValue)
                         CellType.NUMERIC -> dataPoint.put(keys[index], cell.numericCellValue)
