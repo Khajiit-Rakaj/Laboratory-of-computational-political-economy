@@ -31,7 +31,6 @@ private val logger = KotlinLogging.logger {}
 fun main() {
     printBanner()
 
-
     val http = HttpClient(CIO)
     val xmlMapper = XmlMapper()
     val objectMapper = ObjectMapper()
