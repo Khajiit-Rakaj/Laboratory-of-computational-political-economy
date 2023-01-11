@@ -10,7 +10,12 @@ df = df.mask(df == "")
 df = df.convert_dtypes()
 
 gb = df.groupby(["corporation_name"])
-print(gb[["gross_profit", "income_tax_expenses"]].corr())
+
+
+print(gb[["gross_profit", "income_tax_expenses"]].corr(method="pearson"))
+print(gb[["gross_profit", "income_tax_expenses"]].corr(method="spearman"))
+print(gb[["gross_profit", "income_tax_expenses"]].corr(method="kendall"))
+print("------------------\n")
 
 corr = df["gross_profit"].astype("float64").corr(df["income_tax_expenses"].astype("float64"))
 print("Correlation {}".format(corr))

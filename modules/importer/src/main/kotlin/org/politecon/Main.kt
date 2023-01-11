@@ -26,7 +26,7 @@ private val logger = KotlinLogging.logger {}
  * Starting point for application
  *
  * TODO add DI
- * TODO Кореляция между доходом и налогом
+ * TODO корреляция между денежной массой и инфляцией
  */
 fun main() {
     printBanner()
@@ -35,7 +35,6 @@ fun main() {
     val xmlMapper = XmlMapper()
     val objectMapper = ObjectMapper()
     val store = Storage(objectMapper, Hashing.murmur3_128())
-
 
     val loader = ExcelLoader(objectMapper)
     val unRestApi = UnRestApi(http = http, mapper = xmlMapper)
