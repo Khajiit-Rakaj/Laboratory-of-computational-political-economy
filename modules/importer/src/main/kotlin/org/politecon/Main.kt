@@ -62,7 +62,7 @@ fun main() {
             val energyDataJob = async {
                 unRestApi.fetchEnergyData(
                     countries = setOf(CountryCode.RU, CountryCode.US),
-                    commodities = setOf(DataSubject.NATURAL_GAS),
+                    commodities = setOf(DataSubject.NATURAL_GAS, DataSubject.ELECTRICITY),
                     dataDimensions = setOf(DataDimension.PRODUCTION, DataDimension.IMPORT),
                     startDate = startDate,
                     endDate = endDate

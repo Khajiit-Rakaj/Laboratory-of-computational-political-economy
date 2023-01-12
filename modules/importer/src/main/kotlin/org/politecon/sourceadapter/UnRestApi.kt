@@ -248,6 +248,7 @@ class UnRestApi(private val http: HttpClient, private val mapper: XmlMapper) {
          */
         private val SUBJECT_MAP = mapOf(
             DataSubject.NATURAL_GAS to "3000",
+            DataSubject.ELECTRICITY to "7000",
             DataSubject.POPULATION_POVERTY to "SI_POV_NAHC"
         )
 
@@ -281,7 +282,8 @@ class UnRestApi(private val http: HttpClient, private val mapper: XmlMapper) {
         private val REVERSE_SEX_MAP = reverseAssociations(SEX_MAP)
 
         private val UNIT_MAPPER = mapOf(
-            "TJ" to { value: String -> DataPointValue(value.toDouble() * 1000000000000, Units.JOULES) }
+            "TJ" to { value: String -> DataPointValue(value.toDouble() * 1000000000000, Units.JOULE) },
+            "GWHR" to {value:String -> DataPointValue(value.toDouble()*1000000000, Units.WATT_HOUR)}
         )
 
         /**
@@ -289,6 +291,5 @@ class UnRestApi(private val http: HttpClient, private val mapper: XmlMapper) {
          */
         private fun <K, V> reverseAssociations(map: Map<K, V>): Map<V, K> =
             map.entries.associate { (key, value) -> value to key }
-
     }
 }

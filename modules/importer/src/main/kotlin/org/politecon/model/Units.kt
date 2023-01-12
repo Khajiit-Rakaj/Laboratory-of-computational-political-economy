@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 enum class Units {
-    NUMBER, PERCENT, JOULES, M3
+    NUMBER, PERCENT, JOULE, WATT_HOUR, M3
 }
