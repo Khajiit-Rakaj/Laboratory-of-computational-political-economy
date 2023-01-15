@@ -1,4 +1,4 @@
-package org.politecon.sourceadapter
+package org.politecon.sourceadapter.un
 
 import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.node.ArrayNode

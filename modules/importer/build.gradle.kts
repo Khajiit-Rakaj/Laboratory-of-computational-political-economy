@@ -25,6 +25,7 @@ val ktorVersion = "2.2.1"
 val couchBaseVersion = "1.1.1"
 val exposedVersion = "0.40.1"
 val poiVersion = "5.2.3"
+val commonsCsvVersion = "1.9.0"
 
 dependencies {
     implementation("com.google.guava:guava:31.1-jre")
@@ -44,6 +45,9 @@ dependencies {
 
     // База данных
     implementation("com.couchbase.client:kotlin-client:$couchBaseVersion")
+
+    // CSV
+    implementation("org.apache.commons:commons-csv:$commonsCsvVersion")
 
     // Библиотека excel
     implementation("org.apache.poi:poi:$poiVersion")

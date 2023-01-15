@@ -9,13 +9,17 @@ import io.ktor.client.engine.cio.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
-import org.politecon.model.*
+import org.politecon.model.Area
+import org.politecon.model.DataDimension
+import org.politecon.model.DataSubject
 import org.politecon.model.datapoint.SubjectDataPoint
 import org.politecon.model.datapoint.population.PopulationDataPoint
 import org.politecon.persist.DbCollection
 import org.politecon.persist.Storage
 import org.politecon.sourceadapter.ExcelLoader
-import org.politecon.sourceadapter.UnRestApi
+import org.politecon.sourceadapter.eocd.EocdClient
+import org.politecon.sourceadapter.eocd.EocdDataSets
+import org.politecon.sourceadapter.un.UnRestApi
 import org.politecon.util.getResourceAsText
 import java.time.LocalDate
 import kotlin.system.measureTimeMillis
@@ -47,6 +51,18 @@ fun main() {
 
             val corporateFinances = loader.loadFile("/corporate_finance.xlsx")
             store.storeDocuments(DbCollection.CORPORATE_FINANCE, corporateFinances)
+
+
+            val eocd = EocdClient(http, objectMapper)
+            val m1 = eocd.fetchFinancials(
+                datasetCode = EocdDataSets.FINANCIALS.datasetCode,
+                location = CountryCode.US,
+                subject = DataSubject.M1,
+                startDate = LocalDate.of(1960, 1,1),
+                endDate = LocalDate.of(2022,12,31)
+            )
+
+            logger.info {m1.joinToString(separator = "\n")}
 
             //******* Запрос данных **********
             val povertyJob = async {
