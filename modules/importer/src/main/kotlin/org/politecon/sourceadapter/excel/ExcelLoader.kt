@@ -1,4 +1,4 @@
-package org.politecon.sourceadapter
+package org.politecon.sourceadapter.excel
 
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode

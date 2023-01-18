@@ -9,7 +9,7 @@ import io.ktor.http.*
 import mu.KotlinLogging
 import org.politecon.model.DataDimension
 import org.politecon.model.DataSubject
-import org.politecon.model.Units
+import org.politecon.model.DataUnit
 import org.politecon.model.datapoint.BaseDataPoint
 import org.politecon.model.datapoint.DataPointValue
 import org.politecon.model.datapoint.SubjectDataPoint
@@ -57,7 +57,7 @@ class EocdClient(
                 subjectDimension = SubjectDimension(subject, DataDimension.INDEX_YEAR)
                 source = "OECD"
                 country = location
-                value = DataPointValue(jsonNode[0].doubleValue(), Units.NUMBER)
+                value = DataPointValue(jsonNode[0].doubleValue(), DataUnit.NUMBER)
                 date = "${startDate.year + index}"
             }
             dataPoints.add(dataPoint)

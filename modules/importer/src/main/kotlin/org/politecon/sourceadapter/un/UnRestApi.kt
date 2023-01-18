@@ -15,6 +15,7 @@ import org.politecon.model.datapoint.SubjectDataPoint
 import org.politecon.model.datapoint.SubjectDimension
 import org.politecon.model.datapoint.population.PopulationDataPoint
 import org.politecon.util.Substitutions
+import org.politecon.util.reverseAssociations
 import java.time.LocalDate
 import kotlin.system.measureTimeMillis
 
@@ -28,7 +29,6 @@ private val logger = KotlinLogging.logger {}
  * @param mapper configured deserializer
  *
  * TODO exception handling
- * TODO conversion to recognized units (i.e. joules to M3 for NG)
  */
 class UnRestApi(private val http: HttpClient, private val mapper: XmlMapper) {
 
@@ -38,7 +38,7 @@ class UnRestApi(private val http: HttpClient, private val mapper: XmlMapper) {
     suspend fun fetchCountryData(
         subjects: Set<DataSubject>,
         geoDiscriminators: Set<Area>,
-        units: Set<Units>,
+        units: Set<DataUnit>,
         startDate: LocalDate,
         endDate: LocalDate
     ): Set<PopulationDataPoint> {
@@ -71,7 +71,7 @@ class UnRestApi(private val http: HttpClient, private val mapper: XmlMapper) {
                 val area = REVERSE_AREA_MAP[getNodeValue(refData, "LOCATION")] ?: Area.UNKNOWN
                 val countryCode = getNodeValue(refData, "REF_AREA")
                 val sex = REVERSE_SEX_MAP[getNodeValue(refData, "SEX")] ?: Sex.UNKNOWN
-                val unit = Units.valueOf(getNodeValue(refData, "UNIT"))
+                val unit = DataUnit.valueOf(getNodeValue(refData, "UNIT"))
                 val ageRangeTokens = getNodeValue(refData, "AGE_GROUP").split("_")
                 val subjectCode = getNodeValue(refData, "SERIES")
 
@@ -282,14 +282,8 @@ class UnRestApi(private val http: HttpClient, private val mapper: XmlMapper) {
         private val REVERSE_SEX_MAP = reverseAssociations(SEX_MAP)
 
         private val UNIT_MAPPER = mapOf(
-            "TJ" to { value: String -> DataPointValue(value.toDouble() * 1000000000000, Units.JOULE) },
-            "GWHR" to {value:String -> DataPointValue(value.toDouble()*1000000000, Units.WATT_HOUR)}
+            "TJ" to { value: String -> DataPointValue(value.toDouble() * 1000000000000, DataUnit.JOULE) },
+            "GWHR" to { value: String -> DataPointValue(value.toDouble() * 1000000000, DataUnit.WATT_HOUR) }
         )
-
-        /**
-         * Переворачивает направление ассоциации
-         */
-        private fun <K, V> reverseAssociations(map: Map<K, V>): Map<V, K> =
-            map.entries.associate { (key, value) -> value to key }
     }
 }
