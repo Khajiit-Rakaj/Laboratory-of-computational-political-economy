@@ -24,7 +24,7 @@ private val logger = KotlinLogging.logger {}
  * TODO Externalize properties
  * TODO Make singleton
  */
-class Storage(val objectMapper: ObjectMapper, val hasher: HashFunction) {
+class Storage(private val objectMapper: ObjectMapper, private val hasher: HashFunction) {
     private val url = "couchbase://127.0.0.1"
     private val username = "politecon"
     private val password = "politecon"

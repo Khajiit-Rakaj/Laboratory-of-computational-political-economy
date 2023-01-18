@@ -12,13 +12,16 @@ import mu.KotlinLogging
 import org.politecon.model.Area
 import org.politecon.model.DataDimension
 import org.politecon.model.DataSubject
+import org.politecon.model.DataUnit
 import org.politecon.model.datapoint.SubjectDataPoint
 import org.politecon.model.datapoint.population.PopulationDataPoint
 import org.politecon.persist.DbCollection
 import org.politecon.persist.Storage
-import org.politecon.sourceadapter.ExcelLoader
 import org.politecon.sourceadapter.eocd.EocdClient
 import org.politecon.sourceadapter.eocd.EocdDataSets
+import org.politecon.sourceadapter.excel.ExcelLoader
+import org.politecon.sourceadapter.un.UnCsvLoader
+import org.politecon.sourceadapter.un.UnEnergyDataMapper
 import org.politecon.sourceadapter.un.UnRestApi
 import org.politecon.util.getResourceAsText
 import java.time.LocalDate
@@ -43,6 +46,8 @@ fun main() {
     val loader = ExcelLoader(objectMapper)
     val unRestApi = UnRestApi(http = http, mapper = xmlMapper)
 
+    val energyLoader = UnCsvLoader("/csv/un/energy/coal.csv", UnEnergyDataMapper())
+
     val startDate = LocalDate.of(1900, 1, 1)
     val endDate = LocalDate.of(2022, 12, 31)
 
@@ -51,6 +56,9 @@ fun main() {
 
             val corporateFinances = loader.loadFile("/corporate_finance.xlsx")
             store.storeDocuments(DbCollection.CORPORATE_FINANCE, corporateFinances)
+
+            val records = energyLoader.read()
+            store.store(DbCollection.COMMODITY, records)
 
 
             val eocd = EocdClient(http, objectMapper)
@@ -69,7 +77,7 @@ fun main() {
                 unRestApi.fetchCountryData(
                     subjects = setOf(DataSubject.POPULATION_POVERTY),
                     geoDiscriminators = setOf(Area.ALL),
-                    units = DataSubject.POPULATION_POVERTY.allowedUnits,
+                    units = setOf(DataUnit.NUMBER, DataUnit.PERCENT),
                     startDate = startDate,
                     endDate = endDate
                 )
