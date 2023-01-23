@@ -1,27 +1,58 @@
 package org.politecon.sourceadapter.un
 
 import com.neovisionaries.i18n.CountryCode
-import org.politecon.model.DataDimension
-import org.politecon.model.DataSubject
-import org.politecon.model.DataUnit
+import org.politecon.model.*
 import org.politecon.sourceadapter.DataMapper
+import org.politecon.util.mapFindByValue
 
 class UnEnergyDataMapper : DataMapper {
 
-    override fun countryFromCode(input: String): CountryCode {
-        return COUNTRIES[input] ?: CountryCode.UNDEFINED
+    override fun countryFromExternal(external: String): CountryCode {
+        return COUNTRIES[external] ?: CountryCode.UNDEFINED
     }
 
-    override fun subjectFromCode(input: String): DataSubject {
-        return SUBJECTS[input] ?: DataSubject.UNKNOWN
+    override fun areaFromExternal(external: String): Area {
+        TODO("Not yet implemented")
     }
 
-    override fun dimensionFromCode(input: String): DataDimension {
-        return DIMENSIONS[input] ?: DataDimension.UNKNOWN
+    override fun subjectFromExternal(external: String): DataSubject {
+        return SUBJECTS[external] ?: DataSubject.UNKNOWN
     }
 
-    override fun unitFromCode(input: String): DataUnit {
-        return UNITS[input] ?: DataUnit.UNKNOWN
+    override fun dimensionFromExternal(external: String): DataDimension {
+        return DIMENSIONS[external] ?: DataDimension.UNKNOWN
+    }
+
+    override fun unitFromExternal(external: String): DataUnit {
+        return UNITS[external] ?: DataUnit.UNKNOWN
+    }
+
+    override fun sexFromExternal(external: String): Sex {
+        TODO("Not yet implemented")
+    }
+
+    override fun countryToExternal(countryCode: CountryCode): String {
+        return mapFindByValue(COUNTRIES, countryCode) ?: ""
+    }
+
+    override fun areaToExternal(area: Area): String {
+        TODO("Not yet implemented")
+    }
+
+    override fun subjectToExternal(subject: DataSubject): String {
+        return mapFindByValue(SUBJECTS, subject) ?: ""
+    }
+
+    override fun dimensionToExternal(dataDimension: DataDimension): String {
+        return mapFindByValue(DIMENSIONS, dataDimension) ?: ""
+    }
+
+    override fun unitToExternal(dataUnit: DataUnit): String {
+        return mapFindByValue(UNITS, dataUnit) ?: ""
+    }
+
+    override fun sexToExternal(sex: Sex): String {
+        TODO("Not yet implemented")
     }
 
     companion object {
@@ -349,7 +380,9 @@ class UnEnergyDataMapper : DataMapper {
         )
 
         private val UNITS = mapOf(
-            "TN" to DataUnit.TON
+            "TN" to DataUnit.TON,
+            "TJ" to DataUnit.TERRA_JOULE,
+            "GWHR" to DataUnit.GIGA_WATT_HOUR
         )
     }
 }

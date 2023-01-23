@@ -16,6 +16,6 @@ class SubjectDataPoint : BaseDataPoint() {
     }
     override fun naturalKey() = "${subjectDimension.subject}-${subjectDimension.dimension}-${super.naturalKey()}"
     override fun toString(): String {
-        return "SubjectDataPoint(subjectDimension=$subjectDimension)"
+        return "SubjectDataPoint(subjectDimension=$subjectDimension) ${super.toString()}"
     }
 }

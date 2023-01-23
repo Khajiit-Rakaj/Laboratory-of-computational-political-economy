@@ -47,7 +47,7 @@ class Storage(private val objectMapper: ObjectMapper, private val hasher: HashFu
     suspend fun store(dbCollection: DbCollection, dataPoints: Set<BaseDataPoint>) {
         ensureClusterReady()
 
-        logger.info { "Persisting ${dataPoints.size} data points to database" }
+        logger.info { "Сохраняется ${dataPoints.size} точек данных в БД" }
         dataPoints.forEach {
             val collection = scope.collection(dbCollection.collectionName)
             collection.upsert(id = it.naturalKey(), content = it)
@@ -70,7 +70,7 @@ class Storage(private val objectMapper: ObjectMapper, private val hasher: HashFu
     }
 
     /**
-     * Fetches data of certain type
+     * Загружает точки данных
      */
     internal suspend inline fun <reified T>get(collection: DbCollection, limit: Int = 10):Set<T> {
         ensureClusterReady()
@@ -82,18 +82,10 @@ class Storage(private val objectMapper: ObjectMapper, private val hasher: HashFu
 
         val result = query.execute()
 
-        val data = mutableSetOf<T>()
-        result.rows.forEach {
-            data.add(it.contentAs())
-        }
-
-        return data
+        return result.rows.map { it.contentAs<T>() }.toSet()
     }
 
     private suspend fun ensureClusterReady() {
         cluster.waitUntilReady(5.seconds)
     }
-
-
-    private val defaultCollectionName = "_default"
 }

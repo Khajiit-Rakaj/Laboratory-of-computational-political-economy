@@ -1,22 +1,26 @@
-package org.politecon.sourceadapter.un
+package org.politecon.sourceadapter.fred
 
+import com.neovisionaries.i18n.CountryCode
 import mu.KotlinLogging
 import org.apache.commons.csv.CSVFormat
+import org.politecon.model.DataDimension
+import org.politecon.model.DataSubject
+import org.politecon.model.DataUnit
 import org.politecon.model.datapoint.BaseDataPoint
 import org.politecon.model.datapoint.DataPointValue
 import org.politecon.model.datapoint.SubjectDataPoint
 import org.politecon.model.datapoint.SubjectDimension
-import org.politecon.sourceadapter.DataMapper
 import org.politecon.util.getResourceAsStream
 import java.io.InputStreamReader
 
 private val logger = KotlinLogging.logger {}
 
 /**
- * Загружает CSV файлы
+ *
  */
-class UnCsvLoader(private val path: String, private val dataMapper: DataMapper) {
-    fun read(): Set<SubjectDataPoint> {
+class FredCsvLoader(private val path: String) {
+
+    fun read(country: CountryCode, dataSubject: DataSubject, dataDimension: DataDimension, dataUnit:DataUnit): Set<SubjectDataPoint> {
         val stream = getResourceAsStream(path)
 
         val result = mutableSetOf<SubjectDataPoint>()
@@ -25,26 +29,25 @@ class UnCsvLoader(private val path: String, private val dataMapper: DataMapper) 
 
             rows.forEach {
                 result.add(BaseDataPoint.create {
-                    country = dataMapper.countryFromExternal(it["REF_AREA"])
+                    this.country = country
                     subjectDimension = SubjectDimension(
-                        dataMapper.subjectFromExternal(it["COMMODITY"]),
-                        dataMapper.dimensionFromExternal(it["TRANSACTION"])
+                        subject = dataSubject,
+                        dimension = dataDimension
                     )
-                    date = it["TIME_PERIOD"]
-                    value = DataPointValue(it["OBS_VALUE"].toDouble(), dataMapper.unitFromExternal(it["UNIT_MEASURE"]))
-                    source = "UN"
+                    date = it[0]
+                    value = DataPointValue(it[1].toDouble(), dataUnit)
+                    source = "FRED"
                 })
             }
-
         } else {
             logger.info { "Не получилось открыть файл $path" }
         }
 
-        return result.filter { it.valid() }.toSet()
+        return result
     }
 
     companion object {
         private val csvFormat =
-            CSVFormat.Builder.create().setDelimiter(";").setHeader().setSkipHeaderRecord(true).build()
+            CSVFormat.Builder.create().setDelimiter(",").setHeader().setSkipHeaderRecord(true).build()
     }
 }

@@ -2,7 +2,6 @@ package org.politecon.model
 
 enum class DataSubject() {
     NATURAL_GAS,
-    ELECTRICITY,
     POPULATION_POVERTY,
     M1, M3,
     UNKNOWN,
