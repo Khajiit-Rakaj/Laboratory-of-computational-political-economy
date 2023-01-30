@@ -10,7 +10,7 @@ import org.politecon.model.datapoint.BaseDataPoint
 import org.politecon.model.datapoint.DataPointValue
 import org.politecon.model.datapoint.SubjectDataPoint
 import org.politecon.model.datapoint.SubjectDimension
-import org.politecon.util.getResourceAsStream
+import java.io.InputStream
 import java.io.InputStreamReader
 
 private val logger = KotlinLogging.logger {}
@@ -18,10 +18,9 @@ private val logger = KotlinLogging.logger {}
 /**
  *
  */
-class FredCsvLoader(private val path: String) {
+class FredCsvLoader(private val stream:InputStream?) {
 
     fun read(country: CountryCode, dataSubject: DataSubject, dataDimension: DataDimension, dataUnit:DataUnit): Set<SubjectDataPoint> {
-        val stream = getResourceAsStream(path)
 
         val result = mutableSetOf<SubjectDataPoint>()
         if (stream != null) {
@@ -40,7 +39,7 @@ class FredCsvLoader(private val path: String) {
                 })
             }
         } else {
-            logger.info { "Не получилось открыть файл $path" }
+            logger.info { "Не получилось открыть файл" }
         }
 
         return result

@@ -56,6 +56,9 @@ dependencies {
     // Библиотека стран
     implementation("com.neovisionaries:nv-i18n:1.29")
 
+    // Библиотека ZIP
+    implementation("net.lingala.zip4j:zip4j:2.11.3")
+
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.7.22")
 }
 

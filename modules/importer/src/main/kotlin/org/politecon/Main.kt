@@ -28,6 +28,7 @@ import org.politecon.sourceadapter.un.UnCountryDataMapper
 import org.politecon.sourceadapter.un.UnCsvLoader
 import org.politecon.sourceadapter.un.UnEnergyDataMapper
 import org.politecon.util.getResourceAsText
+import org.politecon.util.getStreamFromZip
 import java.time.LocalDate
 import kotlin.system.measureTimeMillis
 
@@ -38,11 +39,14 @@ private val logger = KotlinLogging.logger {}
  *
  * TODO add DI
  * TODO добавить маппер в dataset
+ * TODO gzip чтение
  * TODO Батч загрузчик
  * TODO корреляция между денежной массой и инфляцией
  */
 fun main() {
     printBanner()
+
+    val zipFilePath = "/data.zip"
 
     val http = HttpClient(CIO)
     val xmlMapper = XmlMapper()
@@ -61,14 +65,14 @@ fun main() {
     val elapsed = measureTimeMillis {
         runBlocking {
 
-            val corporateFinances = loader.loadFile("/corporate_finance.xlsx")
+            val corporateFinances = loader.loadFile(getStreamFromZip(zipFilePath, "corporate_finance.xlsx"))
             store.storeDocuments(DbCollection.CORPORATE_FINANCE, corporateFinances)
 
-            val energyLoader = UnCsvLoader("/csv/un/energy/coal.csv", UnEnergyDataMapper())
+            val energyLoader = UnCsvLoader(getStreamFromZip(zipFilePath, "un/energy/coal.csv"), UnEnergyDataMapper())
             val records = energyLoader.read()
             store.store(DbCollection.COMMODITY, records)
 
-            val m1 = FredCsvLoader("/csv/fred/M1SL.csv").read(
+            val m1 = FredCsvLoader(getStreamFromZip(zipFilePath, "fred/M1SL.csv")).read(
                 CountryCode.US,
                 DataSubject.M1,
                 DataDimension.INDICATOR,

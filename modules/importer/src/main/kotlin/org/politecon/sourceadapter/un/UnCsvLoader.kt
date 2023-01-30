@@ -7,7 +7,7 @@ import org.politecon.model.datapoint.DataPointValue
 import org.politecon.model.datapoint.SubjectDataPoint
 import org.politecon.model.datapoint.SubjectDimension
 import org.politecon.sourceadapter.DataMapper
-import org.politecon.util.getResourceAsStream
+import java.io.InputStream
 import java.io.InputStreamReader
 
 private val logger = KotlinLogging.logger {}
@@ -15,9 +15,8 @@ private val logger = KotlinLogging.logger {}
 /**
  * Загружает CSV файлы
  */
-class UnCsvLoader(private val path: String, private val dataMapper: DataMapper) {
+class UnCsvLoader(private val stream: InputStream?, private val dataMapper: DataMapper) {
     fun read(): Set<SubjectDataPoint> {
-        val stream = getResourceAsStream(path)
 
         val result = mutableSetOf<SubjectDataPoint>()
         if (stream != null) {
@@ -37,7 +36,7 @@ class UnCsvLoader(private val path: String, private val dataMapper: DataMapper) 
             }
 
         } else {
-            logger.info { "Не получилось открыть файл $path" }
+            logger.info { "Не получилось открыть файл для загрузки" }
         }
 
         return result.filter { it.valid() }.toSet()

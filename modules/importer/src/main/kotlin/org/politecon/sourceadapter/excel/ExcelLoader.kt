@@ -7,6 +7,7 @@ import org.apache.poi.ss.usermodel.CellType
 import org.apache.poi.ss.usermodel.Row
 import org.apache.poi.ss.usermodel.WorkbookFactory
 import org.politecon.util.getResourceAsStream
+import java.io.InputStream
 
 private val logger = KotlinLogging.logger {}
 
@@ -18,8 +19,8 @@ class ExcelLoader(private val mapper: ObjectMapper) {
     /**
      * Переводит эксель файл в JSON
      */
-    fun loadFile(path: String): Set<ObjectNode> {
-        val wb = WorkbookFactory.create(getResourceAsStream(path))
+    fun loadFile(stream: InputStream?): Set<ObjectNode> {
+        val wb = WorkbookFactory.create(stream)
 
         val result = mutableSetOf<ObjectNode>()
         for (sheetIndex in 1 until wb.numberOfSheets) {
@@ -40,7 +41,7 @@ class ExcelLoader(private val mapper: ObjectMapper) {
 
                 val row = currentSheet.getRow(rowIndex)
 
-                 for(cellIndex in 0 until row.lastCellNum) {
+                for (cellIndex in 0 until row.lastCellNum) {
                     val cell = row.getCell(cellIndex, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK)
                     // Если ячейка - формула, нужно развернуть тип и использовать кэшированое значение
                     when (if (cell.cellType == CellType.FORMULA) cell.cachedFormulaResultType else cell.cellType) {
@@ -55,7 +56,7 @@ class ExcelLoader(private val mapper: ObjectMapper) {
             }
         }
 
-        logger.info { "Загрузка файла $path закончена" }
+        logger.info { "Загрузка файла закончена" }
         return result
     }
 }
