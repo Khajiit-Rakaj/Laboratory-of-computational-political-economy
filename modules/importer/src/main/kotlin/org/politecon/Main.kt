@@ -35,11 +35,10 @@ import kotlin.system.measureTimeMillis
 private val logger = KotlinLogging.logger {}
 
 /**
- * Starting point for application
+ * Начальная точка запуска
  *
  * TODO add DI
  * TODO добавить маппер в dataset
- * TODO gzip чтение
  * TODO Батч загрузчик
  * TODO корреляция между денежной массой и инфляцией
  */
@@ -65,7 +64,7 @@ fun main() {
     val elapsed = measureTimeMillis {
         runBlocking {
 
-            val corporateFinances = loader.loadFile(getStreamFromZip(zipFilePath, "corporate_finance.xlsx"))
+            val corporateFinances = loader.loadFile(getStreamFromZip(zipFilePath, "corp_fin.xlsx"))
             store.storeDocuments(DbCollection.CORPORATE_FINANCE, corporateFinances)
 
             val energyLoader = UnCsvLoader(getStreamFromZip(zipFilePath, "un/energy/coal.csv"), UnEnergyDataMapper())
