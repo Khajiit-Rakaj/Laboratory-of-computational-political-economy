@@ -41,7 +41,10 @@ class ExcelLoader(private val mapper: ObjectMapper) {
 
                 val row = currentSheet.getRow(rowIndex)
 
-                for (cellIndex in 0 until row.lastCellNum) {
+                // Иногда захватывает null ряд
+                val lastCellNum = row?.lastCellNum ?: 0
+
+                for (cellIndex in 0 until lastCellNum) {
                     val cell = row.getCell(cellIndex, Row.MissingCellPolicy.CREATE_NULL_AS_BLANK)
                     // Если ячейка - формула, нужно развернуть тип и использовать кэшированое значение
                     when (if (cell.cellType == CellType.FORMULA) cell.cachedFormulaResultType else cell.cellType) {
