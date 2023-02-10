@@ -2,16 +2,12 @@ package org.politecon.persist
 
 import com.couchbase.client.kotlin.Cluster
 import com.couchbase.client.kotlin.query.execute
-import com.fasterxml.jackson.databind.JsonNode
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.google.common.hash.HashFunction
-import com.google.common.hash.Hasher
-import com.google.common.hash.Hashing
 import mu.KotlinLogging
-import org.politecon.model.datapoint.BaseDataPoint
+import org.politecon.common.datamodel.datapoint.BaseDataPoint
 import java.nio.charset.Charset
-import java.util.*
 import kotlin.time.Duration.Companion.seconds
 
 private val logger = KotlinLogging.logger {}

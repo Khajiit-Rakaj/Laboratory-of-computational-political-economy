@@ -1,7 +1,7 @@
 package org.politecon.sourceadapter.oecd
 
 import com.neovisionaries.i18n.CountryCode
-import org.politecon.model.*
+import org.politecon.common.datamodel.*
 import org.politecon.sourceadapter.DataMapper
 import org.politecon.util.mapFindByValue
 

@@ -1,8 +1,5 @@
-package org.politecon.model
+package org.politecon.common.datamodel
 
-import kotlinx.serialization.Serializable
-
-@Serializable
 enum class DataUnit {
     NUMBER, PERCENT, INDEX, INDEX_YEAR, TERRA_JOULE, GIGA_WATT_HOUR, TON, UNKNOWN
 }

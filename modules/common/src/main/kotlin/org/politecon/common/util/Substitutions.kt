@@ -1,4 +1,4 @@
-package org.politecon.util
+package org.politecon.common.util
 
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -6,7 +6,7 @@ import java.util.regex.Pattern
 /**
  * Utility class to handle dynamic string templates
  *
- * usage: makeString("\${a} # \${b} @ \${c}", mapOf("a" to 123, "c" to "xyz"))   // => "123 # ??? @ xyz"
+ * usage: makeString("#{a} # #{b} @ #{c}", mapOf("a" to 123, "c" to "xyz"))   // => "123 # ??? @ xyz"
  */
 object Substitutions {
     private val pattern = Pattern.compile("#\\{([^}]+)}")

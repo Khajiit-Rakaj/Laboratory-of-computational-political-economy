@@ -1,17 +1,13 @@
 package org.politecon.sourceadapter.oecd
 
-import com.fasterxml.jackson.databind.JsonNode
-import com.fasterxml.jackson.dataformat.xml.XmlMapper
 import com.neovisionaries.i18n.CountryCode
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
 import mu.KotlinLogging
-import org.politecon.model.DataDimension
-import org.politecon.model.DataSubject
-import org.politecon.model.datapoint.BaseDataPoint
-import org.politecon.model.datapoint.DataPointValue
-import org.politecon.model.datapoint.SubjectDataPoint
-import org.politecon.model.datapoint.SubjectDimension
+import org.politecon.common.datamodel.DataDimension
+import org.politecon.common.datamodel.DataSubject
+import org.politecon.common.datamodel.datapoint.BaseDataPoint
+import org.politecon.common.datamodel.datapoint.DataPointValue
+import org.politecon.common.datamodel.datapoint.SubjectDataPoint
+import org.politecon.common.datamodel.datapoint.SubjectDimension
 import org.politecon.sourceadapter.DataMapper
 import org.politecon.sourceadapter.SdmxXmlRestClient
 import org.politecon.util.childByAttribute

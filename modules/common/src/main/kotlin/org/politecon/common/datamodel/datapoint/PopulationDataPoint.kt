@@ -1,9 +1,9 @@
-package org.politecon.model.datapoint.population
+package org.politecon.common.datamodel.datapoint
 
-import org.politecon.model.Area
-import org.politecon.model.DataSubject
-import org.politecon.model.Sex
-import org.politecon.model.datapoint.BaseDataPoint
+import org.politecon.common.datamodel.Area
+import org.politecon.common.datamodel.DataSubject
+import org.politecon.common.datamodel.Sex
+import org.politecon.common.datamodel.datapoint.BaseDataPoint
 
 class PopulationDataPoint : BaseDataPoint() {
 

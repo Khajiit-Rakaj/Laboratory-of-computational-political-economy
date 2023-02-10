@@ -3,13 +3,13 @@ package org.politecon.sourceadapter.fred
 import com.neovisionaries.i18n.CountryCode
 import mu.KotlinLogging
 import org.apache.commons.csv.CSVFormat
-import org.politecon.model.DataDimension
-import org.politecon.model.DataSubject
-import org.politecon.model.DataUnit
-import org.politecon.model.datapoint.BaseDataPoint
-import org.politecon.model.datapoint.DataPointValue
-import org.politecon.model.datapoint.SubjectDataPoint
-import org.politecon.model.datapoint.SubjectDimension
+import org.politecon.common.datamodel.DataDimension
+import org.politecon.common.datamodel.DataSubject
+import org.politecon.common.datamodel.DataUnit
+import org.politecon.common.datamodel.datapoint.BaseDataPoint
+import org.politecon.common.datamodel.datapoint.DataPointValue
+import org.politecon.common.datamodel.datapoint.SubjectDataPoint
+import org.politecon.common.datamodel.datapoint.SubjectDimension
 import java.io.InputStream
 import java.io.InputStreamReader
 
@@ -20,7 +20,7 @@ private val logger = KotlinLogging.logger {}
  */
 class FredCsvLoader(private val stream:InputStream?) {
 
-    fun read(country: CountryCode, dataSubject: DataSubject, dataDimension: DataDimension, dataUnit:DataUnit): Set<SubjectDataPoint> {
+    fun read(country: CountryCode, dataSubject: DataSubject, dataDimension: DataDimension, dataUnit: DataUnit): Set<SubjectDataPoint> {
 
         val result = mutableSetOf<SubjectDataPoint>()
         if (stream != null) {

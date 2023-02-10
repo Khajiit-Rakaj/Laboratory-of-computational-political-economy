@@ -2,10 +2,10 @@ package org.politecon.sourceadapter.un
 
 import mu.KotlinLogging
 import org.apache.commons.csv.CSVFormat
-import org.politecon.model.datapoint.BaseDataPoint
-import org.politecon.model.datapoint.DataPointValue
-import org.politecon.model.datapoint.SubjectDataPoint
-import org.politecon.model.datapoint.SubjectDimension
+import org.politecon.common.datamodel.datapoint.BaseDataPoint
+import org.politecon.common.datamodel.datapoint.DataPointValue
+import org.politecon.common.datamodel.datapoint.SubjectDataPoint
+import org.politecon.common.datamodel.datapoint.SubjectDimension
 import org.politecon.sourceadapter.DataMapper
 import java.io.InputStream
 import java.io.InputStreamReader

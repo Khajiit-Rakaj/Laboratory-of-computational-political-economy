@@ -1,13 +1,11 @@
-package org.politecon.model.datapoint
+package org.politecon.common.datamodel.datapoint
 
-import kotlinx.serialization.Serializable
-import org.politecon.model.DataDimension
-import org.politecon.model.DataSubject
+import org.politecon.common.datamodel.DataDimension
+import org.politecon.common.datamodel.DataSubject
 
 /**
  * Represents a data point for a commodity
  */
-@Serializable
 class SubjectDataPoint : BaseDataPoint() {
     lateinit var subjectDimension: SubjectDimension
 

@@ -1,4 +1,4 @@
-package org.politecon.model
+package org.politecon.common.datamodel
 
 enum class DataSubject() {
     NATURAL_GAS,
