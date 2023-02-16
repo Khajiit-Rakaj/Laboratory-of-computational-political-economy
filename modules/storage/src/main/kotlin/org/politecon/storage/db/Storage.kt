@@ -1,7 +1,8 @@
-package org.politecon.persist
+package org.politecon.storage.db
 
 import com.couchbase.client.kotlin.Cluster
 import com.couchbase.client.kotlin.query.execute
+import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.google.common.hash.HashFunction
@@ -68,7 +69,7 @@ class Storage(private val objectMapper: ObjectMapper, private val hasher: HashFu
     /**
      * Загружает точки данных
      */
-    internal suspend inline fun <reified T>get(collection: DbCollection, limit: Int = 10):Set<T> {
+    suspend fun <T> get(collection: DbCollection, typeRef: TypeReference<T>, limit: Int = 10): Set<T> {
         ensureClusterReady()
 
         val query = scope.query(
@@ -78,7 +79,7 @@ class Storage(private val objectMapper: ObjectMapper, private val hasher: HashFu
 
         val result = query.execute()
 
-        return result.rows.map { it.contentAs<T>() }.toSet()
+        return result.rows.map { objectMapper.readValue(it.content, typeRef) }.toSet()
     }
 
     private suspend fun ensureClusterReady() {

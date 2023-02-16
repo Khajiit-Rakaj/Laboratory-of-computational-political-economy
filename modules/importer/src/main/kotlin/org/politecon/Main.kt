@@ -1,7 +1,9 @@
 package org.politecon
 
+import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.common.hash.Hashing
 import com.neovisionaries.i18n.CountryCode
 import io.ktor.client.*
@@ -15,8 +17,6 @@ import org.politecon.common.datamodel.DataSubject
 import org.politecon.common.datamodel.DataUnit
 import org.politecon.common.datamodel.datapoint.SubjectDataPoint
 import org.politecon.common.datamodel.datapoint.PopulationDataPoint
-import org.politecon.persist.DbCollection
-import org.politecon.persist.Storage
 import org.politecon.sourceadapter.SdmxXmlRestClient
 import org.politecon.sourceadapter.excel.ExcelLoader
 import org.politecon.sourceadapter.fred.FredCsvLoader
@@ -27,6 +27,8 @@ import org.politecon.sourceadapter.un.UnClient
 import org.politecon.sourceadapter.un.UnCountryDataMapper
 import org.politecon.sourceadapter.un.UnCsvLoader
 import org.politecon.sourceadapter.un.UnEnergyDataMapper
+import org.politecon.storage.db.DbCollection
+import org.politecon.storage.db.Storage
 import org.politecon.util.getResourceAsText
 import org.politecon.util.getStreamFromZip
 import java.time.LocalDate
@@ -49,7 +51,7 @@ fun main() {
 
     val http = HttpClient(CIO)
     val xmlMapper = XmlMapper()
-    val objectMapper = ObjectMapper()
+    val objectMapper = jacksonObjectMapper()
     val store = Storage(objectMapper, Hashing.murmur3_128())
     val sdmx = SdmxXmlRestClient(http, xmlMapper)
 
@@ -63,7 +65,6 @@ fun main() {
 
     val elapsed = measureTimeMillis {
         runBlocking {
-
             val corporateFinances = loader.loadFile(getStreamFromZip(zipFilePath, "corp_fin.xlsx"))
             store.storeDocuments(DbCollection.CORPORATE_FINANCE, corporateFinances)
 
@@ -119,10 +120,10 @@ fun main() {
             store.store(DbCollection.COMMODITY, energyData)
             store.store(DbCollection.ECONOMICS, fins)
 
-            val subjectDataPoints: Set<SubjectDataPoint> = store.get(DbCollection.COMMODITY)
+            val subjectDataPoints:Set<SubjectDataPoint> = store.get(DbCollection.COMMODITY, typeRef())
             logger.info { subjectDataPoints.joinToString() }
 
-            val popDataPoints: Set<PopulationDataPoint> = store.get(DbCollection.POPULATION, limit = 50)
+            val popDataPoints: Set<PopulationDataPoint> = store.get(DbCollection.POPULATION, typeRef(), limit = 50)
             logger.info { popDataPoints.joinToString() }
 
         }
@@ -135,5 +136,7 @@ private fun printBanner() {
     logger.info("\n" + getResourceAsText("/banner.txt"))
 }
 
-
+inline fun <reified T> typeRef(): TypeReference<T> {
+    return object : TypeReference<T>() {}
+}
 

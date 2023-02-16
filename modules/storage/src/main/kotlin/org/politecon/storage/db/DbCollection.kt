@@ -1,4 +1,4 @@
-package org.politecon.persist
+package org.politecon.storage.db
 
 enum class DbCollection(val collectionName: String) {
     COMMODITY("commodity_data"),

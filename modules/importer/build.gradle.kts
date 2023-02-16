@@ -20,7 +20,7 @@ repositories {
 
 val jacksonVersion = "2.14.1"
 val ktorVersion = "2.2.1"
-val couchBaseVersion = "1.1.1"
+
 val exposedVersion = "0.40.1"
 val poiVersion = "5.2.3"
 val commonsCsvVersion = "1.9.0"
@@ -28,17 +28,16 @@ val commonsCsvVersion = "1.9.0"
 dependencies {
 
     implementation(project(":modules:common"))
+    implementation(project(":modules:storage"))
 
     // Сериализация
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonVersion")
     implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jacksonVersion")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-yaml:$jacksonVersion")
 
     // REST клиент
     implementation("io.ktor:ktor-client-core:$ktorVersion")
     implementation("io.ktor:ktor-client-cio:$ktorVersion")
-
-    // База данных
-    implementation("com.couchbase.client:kotlin-client:$couchBaseVersion")
 
     // CSV
     implementation("org.apache.commons:commons-csv:$commonsCsvVersion")
