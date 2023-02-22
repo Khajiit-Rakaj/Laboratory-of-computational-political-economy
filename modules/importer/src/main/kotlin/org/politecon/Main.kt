@@ -3,6 +3,8 @@ package org.politecon
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.dataformat.xml.XmlMapper
+import com.fasterxml.jackson.dataformat.yaml.YAMLMapper
+import com.fasterxml.jackson.module.kotlin.jacksonMapperBuilder
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.common.hash.Hashing
 import com.neovisionaries.i18n.CountryCode
@@ -29,8 +31,10 @@ import org.politecon.sourceadapter.un.UnCsvLoader
 import org.politecon.sourceadapter.un.UnEnergyDataMapper
 import org.politecon.storage.db.DbCollection
 import org.politecon.storage.db.Storage
+import org.politecon.util.getResourceAsStream
 import org.politecon.util.getResourceAsText
 import org.politecon.util.getStreamFromZip
+import org.yaml.snakeyaml.Yaml
 import java.time.LocalDate
 import kotlin.system.measureTimeMillis
 
@@ -52,6 +56,7 @@ fun main() {
     val http = HttpClient(CIO)
     val xmlMapper = XmlMapper()
     val objectMapper = jacksonObjectMapper()
+    val yaml = YAMLMapper()
     val store = Storage(objectMapper, Hashing.murmur3_128())
     val sdmx = SdmxXmlRestClient(http, xmlMapper)
 
@@ -59,6 +64,9 @@ fun main() {
     val unEnergyClient = UnClient(sdmx, UnEnergyDataMapper())
     val unCountryClient = UnClient(sdmx, UnCountryDataMapper())
 
+    val config = yaml.readTree(getResourceAsStream("/config/main.yaml"))
+
+    logger.info { config }
 
     val startDate = LocalDate.of(1960, 1, 1)
     val endDate = LocalDate.of(2022, 12, 31)

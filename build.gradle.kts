@@ -1,5 +1,5 @@
 plugins {
-    val kotlinVersion = "1.7.22"
+    val kotlinVersion = "1.8.10"
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion apply false
 }
@@ -10,6 +10,7 @@ repositories {
 
 val kotlinLoggingVersion = "3.0.4"
 val logbackVersion = "1.4.5"
+
 
 subprojects {
     apply(plugin = "org.jetbrains.kotlin.jvm")
