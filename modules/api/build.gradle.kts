@@ -10,7 +10,7 @@ version = "0.0.1"
 application {
     mainClass.set("org.politecon.api.ApplicationKt")
 
-    val isDevelopment: Boolean = true //project.ext.has("development")
+    val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")
 }
 
