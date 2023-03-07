@@ -1,6 +1,6 @@
 export type CorporationFinancials = {
   corporation_name: string
-  year: number
+  year: number | string
   currency: string
   real_effective_exchange_rate: number
   net_revenue: number

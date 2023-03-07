@@ -19,8 +19,8 @@ code {
 }
 
 *,
-*::after,
-*::before {
+::after,
+::before {
   box-sizing: border-box;
 }
 
