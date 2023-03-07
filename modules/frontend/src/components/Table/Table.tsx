@@ -1,3 +1,4 @@
+import styles from "./Table.module.css"
 import DataTable, { TableColumn, createTheme } from "react-data-table-component"
 import DATA from "../../corp_finance.json"
 import { CorporationFinancials } from "../../types/types"
@@ -10,7 +11,7 @@ const columns: TableColumn<CorporationFinancials>[] = [
     selector: (row) => row.corporation_name,
     sortable: true,
     reorder: true,
-    width: "80px",
+    width: "70px",
   },
   {
     name: "Year",
@@ -20,11 +21,12 @@ const columns: TableColumn<CorporationFinancials>[] = [
     width: "80px",
   },
   {
+    compact: true,
     name: "Currency",
+    reorder: true,
     selector: (row) => row.currency,
     sortable: true,
-    reorder: true,
-    compact: true,
+    width: "70px",
   },
   {
     name: "REER",
@@ -44,6 +46,7 @@ const columns: TableColumn<CorporationFinancials>[] = [
     sortable: true,
     compact: true,
     reorder: true,
+    width: "70px",
   },
   {
     name: "GP",
@@ -93,6 +96,7 @@ const columns: TableColumn<CorporationFinancials>[] = [
     sortable: true,
     compact: true,
     reorder: true,
+    width: "70px",
   },
   {
     name: "DAA",
@@ -101,17 +105,34 @@ const columns: TableColumn<CorporationFinancials>[] = [
     reorder: true,
   },
 ]
-const data: any = DATA
+const customStyles = {
+  headCells: {
+    style: {
+      paddingLeft: "8px", // override the cell padding for head cells
+      paddingRight: "8px",
+    },
+  },
+  cells: {
+    style: {
+      paddingLeft: "8px", // override the cell padding for data cells
+      paddingRight: "8px",
+    },
+  },
+}
+const data: any[] = DATA
 
 function Table(): JSX.Element {
   return (
-    <DataTable
-      title="Corporation Financials"
-      columns={columns}
-      data={data}
-      pagination
-      highlightOnHover
-    />
+    <div className={styles.table}>
+      <DataTable
+        title="Corporation Financials"
+        columns={columns}
+        data={data}
+        pagination
+        highlightOnHover
+        customStyles={customStyles}
+      />
+    </div>
   )
 }
 

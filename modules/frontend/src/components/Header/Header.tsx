@@ -1,20 +1,20 @@
-import React from "react"
 import styles from "./Header.module.css"
+import { Link } from "react-router-dom"
 
-function Header() {
+function Header(): JSX.Element {
   return (
     <header className={styles.header}>
       <div className="narrow">
         <nav>
           <ul>
             <li>
-              <a href="/">Home</a>
+              <Link to="/">Home</Link>
             </li>
             <li>
-              <a href="/login">Login</a>
+              <Link to="/login">Login</Link>
             </li>
             <li>
-              <a href="/about">About</a>
+              <Link to="/about">About</Link>
             </li>
           </ul>
         </nav>
