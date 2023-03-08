@@ -1,12 +1,8 @@
 .app {
-  min-height: 100vh;
-}
-
-.content {
-  --offset: calc(var(--footer-height) + var(--logo-height));
-  min-height: calc(100vh - var(--offset));
-
   display: flex;
+  flex-direction: column;
+  position: relative;
   justify-content: center;
-  /* align-items: center; */
 }
+
+
