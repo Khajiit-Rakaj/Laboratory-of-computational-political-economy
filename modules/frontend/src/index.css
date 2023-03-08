@@ -23,10 +23,6 @@ body,
   font-family: "Source Sans Pro", sans-serif;
 }
 
-.app {
-  display: flex;
-  position: relative;
-}
 
 .narrow{
   max-width: var(--max-width);
