@@ -1,19 +1,31 @@
 import styles from "./App.module.css"
-import { Routes, Route, Navigate } from "react-router-dom"
+import { useState } from "react"
+import { Routes, Route } from "react-router-dom"
+import { CssBaseline, ThemeProvider } from "@mui/material"
+import { ColorModeContext, useMode } from "./theme"
 import Header from "./components/Header/Header"
 import Table from "./components/Table/Table"
 import About from "./components/About/About"
 import Login from "./components/Login/Login"
 
 export const App = () => {
+  const [theme, colorMode] = useMode()
+
   return (
-    <div className={styles.app}>
-      <Header />
-      <Routes>
-        <Route path="/" element={<Table />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/about" element={<About />} />
-      </Routes>
-    </div>
+    <ColorModeContext.Provider value={colorMode}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <div className={styles.app}>
+          <Header />
+          <main>
+            <Routes>
+              <Route path="/" element={<Table />} />
+              <Route path="/login" element={<Login />} />
+              <Route path="/about" element={<About />} />
+            </Routes>
+          </main>
+        </div>
+      </ThemeProvider>
+    </ColorModeContext.Provider>
   )
 }
