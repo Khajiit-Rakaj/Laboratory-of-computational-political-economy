@@ -1,6 +1,6 @@
 import styles from "./Table.module.css"
 import DataTable, { TableColumn, createTheme } from "react-data-table-component"
-import DATA from "../../corp_finance.json"
+import DATA from "../../data/corp_finance.json"
 import { CorporationFinancials } from "../../types/types"
 
 type TableProps = {}
