@@ -13,6 +13,7 @@ import io.ktor.client.engine.cio.*
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import mu.KotlinLogging
+import org.apache.commons.codec.binary.StringUtils
 import org.politecon.common.datamodel.Area
 import org.politecon.common.datamodel.DataDimension
 import org.politecon.common.datamodel.DataSubject
@@ -51,6 +52,7 @@ private val logger = KotlinLogging.logger {}
 fun main() {
     printBanner()
 
+
     val zipFilePath = "/data.zip"
 
     val http = HttpClient(CIO)
@@ -73,6 +75,9 @@ fun main() {
 
     val elapsed = measureTimeMillis {
         runBlocking {
+            val patents = loader.loadFile(getStreamFromZip(zipFilePath, "patents.xlsx"))
+            store.storeDocuments(DbCollection.PATENTS, patents)
+
             val corporateFinances = loader.loadFile(getStreamFromZip(zipFilePath, "corp_fin.xlsx"))
             store.storeDocuments(DbCollection.CORPORATE_FINANCE, corporateFinances)
 
