@@ -127,7 +127,7 @@ function Table(): JSX.Element {
       <DataTable
         title="Corporation Financials"
         columns={columns}
-        data={data}
+        data={data || []}
         pagination
         highlightOnHover
         customStyles={customStyles}

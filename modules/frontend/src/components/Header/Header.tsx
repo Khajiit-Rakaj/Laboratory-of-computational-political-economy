@@ -1,26 +1,21 @@
-import styles from "./Header.module.css"
-import { Link } from "react-router-dom"
+import React from "react"
+import AppBar from "@mui/material/AppBar"
+import Toolbar from "@mui/material/Toolbar"
+import NavTabs from "../NavTabs/NavTabs"
 
-function Header(): JSX.Element {
+export const Header = (): JSX.Element => {
   return (
-    <header className={styles.header}>
-      <div className="narrow">
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/login">Login</Link>
-            </li>
-            <li>
-              <Link to="/about">About</Link>
-            </li>
-          </ul>
-        </nav>
-      </div>
-    </header>
+    <>
+      <AppBar
+        elevation={10}
+        position="sticky"
+        enableColorOnDark
+        sx={{ height: "var( --navbar-height)" }}
+      >
+        <Toolbar>
+          <NavTabs />
+        </Toolbar>
+      </AppBar>
+    </>
   )
 }
-
-export default Header

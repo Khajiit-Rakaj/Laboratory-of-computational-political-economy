@@ -1,12 +1,12 @@
-import styles from "./Header.module.css"
+import styles from "./Navbar.module.css"
 import { Link } from "react-router-dom"
 import { useContext } from "react"
 import { Box, IconButton, Button, Typography, useTheme } from "@mui/material"
-import { ColorModeContext, tokens } from "../../theme"
+import { ColorModeContext, tokens } from "../theme/theme"
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined"
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined"
 
-function Header(): JSX.Element {
+function Navbar(): JSX.Element {
   const theme = useTheme()
   const colors = tokens(theme.palette.mode)
   const colorMode = useContext(ColorModeContext)
@@ -54,4 +54,4 @@ function Header(): JSX.Element {
   )
 }
 
-export default Header
+export default Navbar

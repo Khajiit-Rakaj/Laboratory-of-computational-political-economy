@@ -1,4 +1,4 @@
-.header {
+.navbar {
   background-color: #494545;
   color: #fff;
   padding: 1rem;
@@ -6,7 +6,7 @@
   justify-content: center;
   align-items: center;
   border-bottom: 4px solid #d3d3d3;
-  height: var(--header-height);
+  height: var(--navbar-height);
 }
 
 .narrow{

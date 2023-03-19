@@ -119,7 +119,6 @@ export const tokens = (mode: string) => ({
       }),
 })
 
-// mui theme settings
 export const themeSettings = (mode: string) => {
   const colors = tokens(mode)
   return {
@@ -146,24 +145,28 @@ export const themeSettings = (mode: string) => {
         : {
             // palette values for light mode
             primary: {
-              main: colors.primary[100],
+              dark: "#37966F",
+              main: "#356859",
+              light: "#B9E4C9",
             },
             secondary: {
-              main: colors.greenAccent[500],
+              main: "#FD5523",
             },
-            neutral: {
-              dark: colors.grey[700],
-              main: colors.grey[500],
-              light: colors.grey[100],
-            },
+            light: "#B9E4C9",
             background: {
-              default: "#fcfcfc",
+              paper: "#FFFBE6",
+              default: "#FFFBE6",
+            },
+            text: {
+              primary: "#356859",
+              secondary: "#FFFBE6",
+              light: "#B9E4C9",
             },
           }),
     },
     typography: {
       fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
-      fontSize: 12,
+      fontSize: 14,
       h1: {
         fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
         fontSize: 40,
@@ -188,6 +191,9 @@ export const themeSettings = (mode: string) => {
         fontFamily: ["Source Sans Pro", "sans-serif"].join(","),
         fontSize: 14,
       },
+    },
+    a: {
+      fontSize: "12rem",
     },
   }
 }
@@ -215,5 +221,6 @@ export const useMode = (): UseModeReturnType => {
     () => createTheme(themeSettings(mode) as ThemeOptions),
     [mode]
   )
+
   return [theme, colorMode]
 }
