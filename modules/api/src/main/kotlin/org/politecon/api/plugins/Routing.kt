@@ -3,15 +3,17 @@ package org.politecon.api.plugins
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.common.hash.Hashing
 import io.ktor.http.*
-import io.ktor.server.routing.*
-import io.ktor.server.response.*
-import io.ktor.server.http.content.*
 import io.ktor.server.application.*
 import org.politecon.api.models.EconomicsModel
+import io.ktor.server.http.content.*
+import io.ktor.server.resources.*
+import io.ktor.server.response.*
+import io.ktor.server.routing.*
 import org.politecon.storage.db.Storage
 import repository.EconomicsRepo
 
 fun Application.configureRouting() {
+    install(Resources)
 
     val objectMapper = jacksonObjectMapper()
     val hashing = Hashing.murmur3_128()

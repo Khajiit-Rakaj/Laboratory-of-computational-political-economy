@@ -1,14 +1,11 @@
 package org.politecon.api
 
 import io.ktor.server.application.*
-import io.ktor.server.engine.*
-import io.ktor.server.netty.*
-import org.politecon.api.plugins.*
+import org.politecon.api.plugins.configureHTTP
+import org.politecon.api.plugins.configureRouting
+import org.politecon.api.plugins.configureSerialization
 
-fun main() {
-    embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::module)
-        .start(wait = true)
-}
+fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
 fun Application.module() {
     configureHTTP()
