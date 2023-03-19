@@ -1,0 +1,11 @@
+services:
+ couchbase:
+  image: couchbase:community-7.1.1
+  container_name: couchdb
+  ports:
+   - "8091-8096:8091-8096"
+   - "11210-11211:11210-11211"
+  volumes:
+   - ./couchbase-up.sh:/couchbase-up.sh
+  entrypoint: sh -c "chmod +x couchbase-up.sh;/couchbase-up.sh"
+  tty: true
