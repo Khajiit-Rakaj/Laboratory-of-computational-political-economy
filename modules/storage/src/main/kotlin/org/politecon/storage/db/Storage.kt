@@ -6,6 +6,7 @@ import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.databind.node.ObjectNode
 import com.google.common.hash.HashFunction
+import models.TableInfo
 import mu.KotlinLogging
 import org.politecon.common.datamodel.datapoint.BaseDataPoint
 import java.nio.charset.Charset
@@ -21,6 +22,8 @@ private val logger = KotlinLogging.logger {}
  * TODO Externalize properties
  * TODO Make singleton
  */
+
+
 class Storage(private val objectMapper: ObjectMapper, private val hasher: HashFunction) {
     private val url = "couchbase://127.0.0.1"
     private val username = "politecon"
@@ -80,6 +83,30 @@ class Storage(private val objectMapper: ObjectMapper, private val hasher: HashFu
         val result = query.execute()
 
         return result.rows.map { objectMapper.readValue(it.content, typeRef) }.toSet()
+    }
+
+    suspend fun getTablesList(): Array<TableInfo?> {
+        ensureClusterReady()
+        val result = arrayOfNulls<TableInfo>(scope.bucket.collections.getScope("_default").collections.size)
+        var idx = 0
+        for (collection in scope.bucket.collections.getScope("_default").collections) {
+            val query = scope.query(
+                statement = "select count(*) from ${collection.name}",
+                adhoc = false
+            )
+
+            if (collection.name == "_default") continue
+
+            val queryResult = query.execute()
+            val count = queryResult.rows.map {
+                objectMapper.readValue(
+                    it.content,
+                    object : TypeReference<Map<String, String>>() {})
+            }[0]["$1"]
+            result[idx] = TableInfo(collection.name, count?.toInt() ?: 0)
+            idx++
+        }
+        return result
     }
 
     private suspend fun ensureClusterReady() {
