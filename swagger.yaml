@@ -1,0 +1,113 @@
+openapi: 3.0.3
+info:
+  title: АИС "Аггрипина" 3.0
+  description: |-
+    Автоматизированная информационнавя система, предназначенная для предоставления статистической информации о современной мировой экономике
+  license:
+    name: GPL 3.0
+    url: https://github.com/Khajiit-Rakaj/Laboratory-of-computational-political-economy/blob/main/LICENSE
+  version: 0.0.1
+
+servers:
+  - url: http://0.0.0.0:8080
+
+tags:
+  - name: other
+    description: Базовые запросы на данный момент
+
+paths:
+  /:
+    get:
+      tags:
+        - other
+      summary: Тестовый запрос на проверку работоспособности сервера
+      description: Простой текстовый Hello World
+      responses:
+        '200':
+          description: ОК
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 'Hello World!'
+
+
+  /economics:
+    get:
+      tags:
+        - other
+      summary: Информация из таблиц со статистикой
+      description: Выгрузка из таблиц с экономической информацией
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Commodity'
+
+  /tables:
+    get:
+      tags:
+        - other
+      summary: Список таблиц
+      description: Список имеющихся таблиц с информацией и количеством записей в каждой
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TableInfo'
+
+components:
+  schemas:
+    Commodity:
+      type: object
+      properties:
+        country:
+          type: string
+          description: Двухбуквенный код страны по стандарту ISO 3166
+          example: 'AE'
+        source:
+          type: string
+          example: 'UN'
+        date:
+          type: integer
+          format: int32
+          example: 2019
+        subjectDimension:
+          type: object
+          properties:
+            subject:
+              type: string
+              example: 'ANTHRACITE'
+            dimension:
+              type: string
+              example: 'EXPORT'
+        value:
+          type: object
+          properties:
+            value:
+              type: number
+              format: double
+              example: 0.035
+            dataUnit:
+              type: string
+              example: 'TON'
+
+    TableInfo:
+      type: object
+      properties:
+        tableName:
+          type: string
+          description: Название таблицы
+          example: 'commodity_data'
+        docsNum:
+          type: integer
+          description: Количество записей в этой таблице
+          example: 18883
