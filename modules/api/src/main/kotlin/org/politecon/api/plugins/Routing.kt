@@ -1,22 +1,25 @@
 package org.politecon.api.plugins
 
-import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import com.google.common.hash.Hashing
+import io.ktor.http.*
 import io.ktor.server.routing.*
 import io.ktor.server.response.*
 import io.ktor.server.http.content.*
 import io.ktor.server.application.*
-import org.politecon.api.models.tableListToModel
-import org.politecon.common.datamodel.datapoint.SubjectDataPoint
-import org.politecon.storage.db.DbCollection
+import org.politecon.api.models.EconomicsModel
 import org.politecon.storage.db.Storage
+import repository.EconomicsRepo
 
 fun Application.configureRouting() {
 
     val objectMapper = jacksonObjectMapper()
     val hashing = Hashing.murmur3_128()
     val storage = Storage(objectMapper, hashing)
+    val contentType = ContentType.Application.Json.withParameter("charset", "utf-8")
+
+    val economicsRepo = EconomicsRepo(storage)
+    val econimicsModel = EconomicsModel(economicsRepo)
 
     routing {
         get("/") {
@@ -24,18 +27,21 @@ fun Application.configureRouting() {
         }
 
         get("/economics") {
-            val dataPoints =
-                storage.get(DbCollection.COMMODITY, object : TypeReference<SubjectDataPoint>() {}, limit = 50)
+            val dataPoints = econimicsModel.GetEconomicsData()
             kotlin.runCatching {
-                call.respond(objectMapper.writeValueAsString(dataPoints))
+                call.respondText(
+                    objectMapper.writeValueAsString(dataPoints),
+                    contentType
+                )
             }
         }
 
         get("/tables") {
-            val data = storage.getTablesList()
-            val response = tableListToModel(data)
             kotlin.runCatching {
-                call.respond(response)
+                call.respondText(
+                    objectMapper.writeValueAsString(econimicsModel.GetTablesList()),
+                    contentType
+                )
             }
         }
 

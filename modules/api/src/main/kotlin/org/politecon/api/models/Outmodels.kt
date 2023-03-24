@@ -3,7 +3,7 @@ package org.politecon.api.models
 import models.TableInfo
 import org.politecon.api.plugins.TableList
 
-fun tableListToModel(tables: Array<TableInfo?>): TableList {
+fun tableListToOutmodel(tables: Array<TableInfo?>): TableList {
     val tableArr = mutableListOf<org.politecon.api.plugins.TableInfo>()
     for (table in tables) {
         if (table != null) {
