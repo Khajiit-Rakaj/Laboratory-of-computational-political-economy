@@ -5,5 +5,11 @@ enum class DbCollection(val collectionName: String) {
     POPULATION("population_data"),
     CORPORATE_FINANCE("corporate_finance"),
     ECONOMICS("economics"),
-    PATENTS("patents")
+    PATENTS("patents");
+
+    companion object {
+        fun byNameIgnoreCaseOrNull(input: String): DbCollection? {
+            return values().firstOrNull { it.name.equals(input, true) }
+        }
+    }
 }
