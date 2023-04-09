@@ -10,10 +10,10 @@ import io.ktor.server.resources.post
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import io.ktor.utils.io.*
-import kotlinx.serialization.Contextual
-import org.politecon.api.Utils.HTTPUtils
 import org.politecon.api.enums.FailResponses
 import org.politecon.api.enums.SuccessfulResponses
+import org.politecon.api.models.DataUploadFormData
+import org.politecon.api.utils.HTTPUtils
 import org.politecon.loaders.FileLoaderProvider
 
 @Resource("/dataupload")
@@ -25,15 +25,15 @@ class DataUpload {
     class FromString(val parent: DataUpload = DataUpload())
 
 
-    suspend fun fromFile(files: ArrayList<Pair<String, ByteArray>>, type: String, collection: String, scope: String): Boolean {
+    suspend fun fromFile(dataUploadFormData: DataUploadFormData): Boolean {
         val fileLoaderProvider: FileLoaderProvider = FileLoaderProvider()
         var result: Boolean = true
 
-        files.forEach { file ->
-            val loader = fileLoaderProvider.provide(file.first, type)
+        dataUploadFormData.files.forEach { file ->
+            val loader = fileLoaderProvider.provide(file.first, dataUploadFormData.type!!)
 
             result = if (loader != null) {
-                result && loader.upload(file.second.inputStream(), collection)
+                result && loader.upload(file.second.inputStream(), dataUploadFormData.collection!!)
             } else {
                 false
             }
@@ -61,14 +61,10 @@ fun Application.module() {
 
         post<DataUpload.FromFile> {
             val data: MultiPartData = call.receiveMultipart()
-            val formData = HTTPUtils.getFormData(data)
+            val dataUploadFormData = HTTPUtils.mapFormData<DataUploadFormData>(data)
 
-            if (formData.fields.any(predicate = { it.first == "collection" && it.second.isNotEmpty() }) && formData.files.any()) {
-                val collection = formData.fields.first(predicate = { it.first == "collection" }).second
-                val type = formData.fields.first(predicate = { it.first == "type" }).second
-                val scope = formData.fields.firstOrNull(predicate = { it.first == "scope" })?.second ?: "_default"
-
-                if (dataUpload.fromFile(formData.files, type, collection, scope)) {
+            if (dataUploadFormData?.isValid() == true) {
+                if (dataUpload.fromFile(dataUploadFormData)) {
                     resultCode = HttpStatusCode.Created
                     resultMessage = SuccessfulResponses.Created.response
                 } else {
