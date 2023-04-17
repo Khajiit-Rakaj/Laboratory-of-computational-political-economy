@@ -1,4 +1,4 @@
-package org.politecon.api.Utils
+package org.politecon.api.utils
 
 class FormData {
     val fields: ArrayList<Pair<String, String>> = arrayListOf()
