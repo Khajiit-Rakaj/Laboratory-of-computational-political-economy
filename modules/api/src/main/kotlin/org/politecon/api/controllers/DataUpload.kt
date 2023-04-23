@@ -38,7 +38,6 @@ class DataUpload {
                 false
             }
         }
-
         return result
     }
 }
