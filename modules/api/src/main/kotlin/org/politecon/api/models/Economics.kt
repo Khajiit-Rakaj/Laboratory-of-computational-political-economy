@@ -1,7 +1,9 @@
 package org.politecon.api.models
 
 import org.politecon.api.plugins.TableList
+import org.politecon.common.datamodel.datapoint.PopulationDataPoint
 import org.politecon.common.datamodel.datapoint.SubjectDataPoint
+import org.politecon.common.datamodel.datapoint.PatentsDataPoint
 import repository.EconomicsRepo
 
 class EconomicsModel(_economicsRepo: EconomicsRepo) {
@@ -18,5 +20,21 @@ class EconomicsModel(_economicsRepo: EconomicsRepo) {
 
     suspend fun GetEconomicsData(): Set<SubjectDataPoint> {
         return repo.GetEconomicsData()
+    }
+
+    suspend fun GetPopulationData(): Set<PopulationDataPoint> {
+        return repo.GetPopulationData()
+    }
+
+    suspend fun GetPatentsData(): Set<PatentsDataPoint> {
+        return repo.GetPatentsData()
+    }
+
+    suspend fun GetCommodityData(): Set<SubjectDataPoint> {
+        return repo.GetCommodityData()
+    }
+
+    suspend fun GetCorporateFinanceData(): Set<SubjectDataPoint> {
+        return repo.GetCorporateFinanceData()
     }
 }
