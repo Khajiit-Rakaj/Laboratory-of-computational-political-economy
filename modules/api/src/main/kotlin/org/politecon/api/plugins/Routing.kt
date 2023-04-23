@@ -28,9 +28,18 @@ fun Application.configureRouting() {
             call.respondText("Hello World!")
         }
 
-        get("/economics") {
-            val dataPoints = econimicsModel.GetEconomicsData()
+        get("/tables") {
             kotlin.runCatching {
+                call.respondText(
+                    objectMapper.writeValueAsString(econimicsModel.GetTablesList()),
+                    contentType
+                )
+            }
+        }
+
+        get("/tables/economics") {
+            kotlin.runCatching {
+                val dataPoints = econimicsModel.GetEconomicsData()
                 call.respondText(
                     objectMapper.writeValueAsString(dataPoints),
                     contentType
@@ -38,10 +47,41 @@ fun Application.configureRouting() {
             }
         }
 
-        get("/tables") {
+        get("/tables/population_data") {
             kotlin.runCatching {
+                val dataPoints = econimicsModel.GetPopulationData()
                 call.respondText(
-                    objectMapper.writeValueAsString(econimicsModel.GetTablesList()),
+                    objectMapper.writeValueAsString(dataPoints),
+                    contentType
+                )
+            }
+        }
+
+        get("/tables/patents") {
+            kotlin.runCatching {
+                val dataPoints = econimicsModel.GetPatentsData()
+                call.respondText(
+                    objectMapper.writeValueAsString(dataPoints),
+                    contentType
+                )
+            }
+        }
+
+        get("/tables/commodity_data") {
+            kotlin.runCatching {
+                val dataPoints = econimicsModel.GetCommodityData()
+                call.respondText(
+                    objectMapper.writeValueAsString(dataPoints),
+                    contentType
+                )
+            }
+        }
+
+        get("/tables/corporate_finance") {
+            kotlin.runCatching {
+                val dataPoints = econimicsModel.GetCorporateFinanceData()
+                call.respondText(
+                    objectMapper.writeValueAsString(dataPoints),
                     contentType
                 )
             }
