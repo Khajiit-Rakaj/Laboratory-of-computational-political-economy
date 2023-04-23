@@ -29,8 +29,8 @@ class EconomicsRepo(_storage: Storage) {
         return result
     }
 
-    suspend fun GetPatentsData(): Set<PatentsDataPoint> {
-        val result = storage.get(DbCollection.PATENTS, object : TypeReference<PatentsDataPoint>() {}, limit = 50)
+    suspend fun GetPatentsData(): Set<HashMap<String, String>> {
+        val result = storage.get(DbCollection.PATENTS, object : TypeReference<HashMap<String, String>>() {}, limit = 50)
         return result
     }
 
@@ -39,9 +39,13 @@ class EconomicsRepo(_storage: Storage) {
         return result
     }
 
-    suspend fun GetCorporateFinanceData(): Set<SubjectDataPoint> {
+    suspend fun GetCorporateFinanceData(): Set<HashMap<String, String>> {
         val result =
-            storage.get(DbCollection.CORPORATE_FINANCE, object : TypeReference<SubjectDataPoint>() {}, limit = 50)
+            storage.get(
+                DbCollection.CORPORATE_FINANCE,
+                object : TypeReference<HashMap<String, String>>() {},
+                limit = 50
+            )
         return result
     }
 }

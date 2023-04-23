@@ -26,7 +26,7 @@ class EconomicsModel(_economicsRepo: EconomicsRepo) {
         return repo.GetPopulationData()
     }
 
-    suspend fun GetPatentsData(): Set<PatentsDataPoint> {
+    suspend fun GetPatentsData(): Set<HashMap<String, String>> {
         return repo.GetPatentsData()
     }
 
@@ -34,7 +34,7 @@ class EconomicsModel(_economicsRepo: EconomicsRepo) {
         return repo.GetCommodityData()
     }
 
-    suspend fun GetCorporateFinanceData(): Set<SubjectDataPoint> {
+    suspend fun GetCorporateFinanceData(): Set<HashMap<String, String>> {
         return repo.GetCorporateFinanceData()
     }
 }
