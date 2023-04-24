@@ -1,6 +1,8 @@
 package org.politecon.storage.db
 
+import com.couchbase.client.kotlin.Bucket
 import com.couchbase.client.kotlin.Cluster
+import com.couchbase.client.kotlin.Scope
 import com.couchbase.client.kotlin.query.execute
 import com.fasterxml.jackson.core.type.TypeReference
 import com.fasterxml.jackson.databind.ObjectMapper
@@ -32,33 +34,30 @@ class Storage(private val objectMapper: ObjectMapper, private val hasher: HashFu
     private val bucketName = "politecon"
     private val scopeName = "_default"
 
-    private val cluster = Cluster.connect(
-        connectionString = url,
-        username = username,
-        password = password,
-    )
-
-    private val bucket = cluster.bucket(bucketName)
-    private val scope = bucket.scope(scopeName)
-
     /**
      * Persists data to database
      */
     suspend fun store(dbCollection: DbCollection, dataPoints: Set<BaseDataPoint>) {
-        ensureClusterReady()
+        val cluster = getCluster()
+        val scope = getScope(getBucket(cluster))
+        ensureClusterReady(cluster)
 
         logger.info { "Сохраняется ${dataPoints.size} точек данных в БД" }
         dataPoints.forEach {
             val collection = scope.collection(dbCollection.collectionName)
             collection.upsert(id = it.naturalKey(), content = it)
         }
+
+        cluster.disconnect()
     }
 
     /**
      * Сохраняет нетипизированные документы в базу данных
      */
     suspend fun storeDocuments(dbCollection: DbCollection, dataPoints: Set<ObjectNode>) {
-        ensureClusterReady()
+        val cluster = getCluster()
+        val scope = getScope(getBucket(cluster))
+        ensureClusterReady(cluster)
 
         logger.info { "Сохранятся ${dataPoints.size} документов в базу данных" }
 
@@ -67,18 +66,23 @@ class Storage(private val objectMapper: ObjectMapper, private val hasher: HashFu
             val objectHash = hasher.hashString(objectMapper.writeValueAsString(it), Charset.defaultCharset()).toString()
             collection.upsert(id = objectHash, content = it)
         }
+        cluster.disconnect()
     }
 
     /**
      * Загружает точки данных
      */
     suspend fun <T> get(collection: DbCollection, typeRef: TypeReference<T>, limit: Int = 10): Set<T> {
-        ensureClusterReady()
+        val cluster = getCluster()
+        val scope = getScope(getBucket(cluster))
+        ensureClusterReady(cluster)
 
         val query = scope.query(
             statement = "select d.* from ${collection.collectionName} d limit $limit",
             adhoc = false
         )
+
+        cluster.disconnect()
 
         val result = query.execute()
 
@@ -86,7 +90,9 @@ class Storage(private val objectMapper: ObjectMapper, private val hasher: HashFu
     }
 
     suspend fun getTablesList(): Array<TableInfo?> {
-        ensureClusterReady()
+        val cluster = getCluster()
+        val scope = getScope(getBucket(cluster))
+        ensureClusterReady(cluster)
         val result = arrayOfNulls<TableInfo>(scope.bucket.collections.getScope("_default").collections.size)
         var idx = 0
         for (collection in scope.bucket.collections.getScope("_default").collections) {
@@ -106,10 +112,29 @@ class Storage(private val objectMapper: ObjectMapper, private val hasher: HashFu
             result[idx] = TableInfo(collection.name, count?.toInt() ?: 0)
             idx++
         }
+
+        cluster.disconnect()
+
         return result
     }
 
-    private suspend fun ensureClusterReady() {
+    private suspend fun getCluster(): Cluster {
+        return Cluster.connect(
+            connectionString = url,
+            username = username,
+            password = password,
+        )
+    }
+
+    private suspend fun getBucket(cluster: Cluster): Bucket {
+        return cluster.bucket(bucketName)
+    }
+
+    private suspend fun getScope(bucket: Bucket): Scope {
+        return bucket.scope(scopeName)
+    }
+
+    private suspend fun ensureClusterReady(cluster: Cluster) {
         cluster.waitUntilReady(5.seconds)
     }
 }
