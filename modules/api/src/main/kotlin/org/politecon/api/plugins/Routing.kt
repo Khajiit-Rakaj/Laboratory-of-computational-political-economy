@@ -31,59 +31,34 @@ fun Application.configureRouting() {
         get("/tables") {
             kotlin.runCatching {
                 call.respondText(
-                    objectMapper.writeValueAsString(econimicsModel.GetTablesList()),
-                    contentType
+                    objectMapper.writeValueAsString(econimicsModel.GetTablesList()), contentType
                 )
             }
         }
 
-        get("/tables/economics") {
+        get("/tables/data") {
             kotlin.runCatching {
-                val dataPoints = econimicsModel.GetEconomicsData()
-                call.respondText(
-                    objectMapper.writeValueAsString(dataPoints),
-                    contentType
-                )
-            }
-        }
+                when (call.request.queryParameters["table"]) {
+                    "economics" -> call.respondText(
+                        objectMapper.writeValueAsString(econimicsModel.GetEconomicsData()), contentType
+                    )
 
-        get("/tables/population_data") {
-            kotlin.runCatching {
-                val dataPoints = econimicsModel.GetPopulationData()
-                call.respondText(
-                    objectMapper.writeValueAsString(dataPoints),
-                    contentType
-                )
-            }
-        }
+                    "patents" -> call.respondText(
+                        objectMapper.writeValueAsString(econimicsModel.GetPatentsData()), contentType
+                    )
 
-        get("/tables/patents") {
-            kotlin.runCatching {
-                val dataPoints = econimicsModel.GetPatentsData()
-                call.respondText(
-                    objectMapper.writeValueAsString(dataPoints),
-                    contentType
-                )
-            }
-        }
+                    "population_data" -> call.respondText(
+                        objectMapper.writeValueAsString(econimicsModel.GetPopulationData()), contentType
+                    )
 
-        get("/tables/commodity_data") {
-            kotlin.runCatching {
-                val dataPoints = econimicsModel.GetCommodityData()
-                call.respondText(
-                    objectMapper.writeValueAsString(dataPoints),
-                    contentType
-                )
-            }
-        }
+                    "commodity_data" -> call.respondText(
+                        objectMapper.writeValueAsString(econimicsModel.GetCommodityData()), contentType
+                    )
 
-        get("/tables/corporate_finance") {
-            kotlin.runCatching {
-                val dataPoints = econimicsModel.GetCorporateFinanceData()
-                call.respondText(
-                    objectMapper.writeValueAsString(dataPoints),
-                    contentType
-                )
+                    "corporate_finance" -> call.respondText(
+                        objectMapper.writeValueAsString(econimicsModel.GetCorporateFinanceData()), contentType
+                    )
+                }
             }
         }
 
