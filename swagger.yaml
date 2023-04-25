@@ -31,23 +31,6 @@ paths:
                 type: string
                 example: 'Hello World!'
 
-
-  /economics:
-    get:
-      tags:
-        - other
-      summary: Информация из таблиц со статистикой
-      description: Выгрузка из таблиц с экономической информацией
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Commodity'
-
   /tables:
     get:
       tags:
@@ -63,6 +46,34 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/TableInfo'
+
+  /tables/data:
+    get:
+      tags:
+        - other
+      summary: Информация из таблиц со статистикой
+      description: Выгрузка из таблиц с экономической информацией
+      parameters:
+        - name: table
+          in: query
+          required: true
+          schema:
+            type: string
+            enum: [ 'patents', 'economics', 'corporate_finance', 'population_data', 'commodity_data' ]
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  oneOf:
+                    - $ref: '#/components/schemas/Commodity'
+                    - $ref: '#/components/schemas/Patents'
+                    - $ref: '#/components/schemas/CorporateFinance'
+                    - $ref: '#/components/schemas/PopulationData'
+                    - $ref: '#/components/schemas/Economics'
 
 components:
   schemas:
@@ -99,6 +110,198 @@ components:
             dataUnit:
               type: string
               example: 'TON'
+
+    Economics:
+      type: object
+      properties:
+        country:
+          type: string
+          description: Двухбуквенный код страны по стандарту ISO 3166
+          example: 'CA'
+        source:
+          type: string
+          example: 'EOCD'
+        date:
+          type: integer
+          format: int32
+          example: 2019
+        subjectDimension:
+          type: object
+          properties:
+            subject:
+              type: string
+              example: 'M1'
+            dimension:
+              type: string
+              example: 'INDICATOR'
+        value:
+          type: object
+          properties:
+            value:
+              type: number
+              format: double
+              example: 1.256222
+            dataUnit:
+              type: string
+              example: 'INDEX_YEAR'
+
+    PopulationData:
+      type: object
+      properties:
+        country:
+          type: string
+          description: Двухбуквенный код страны по стандарту ISO 3166
+          example: 'AG'
+        source:
+          type: string
+          example: 'UN'
+        date:
+          type: integer
+          format: int32
+          example: 2019
+        subject:
+          type: string
+          example: 'POPULATION_POVERTY'
+        value:
+          type: object
+          properties:
+            value:
+              type: number
+              format: double
+              example: 18.4
+            dataUnit:
+              type: string
+              example: 'PERCENT'
+        areaConstraint:
+          type: string
+          example: 'ALL'
+        sexConstraint:
+          type: string
+          example: 'ALL'
+        ageConstraint:
+          type: object
+          properties:
+            start:
+              type: integer
+              example: 0
+            end:
+              type: integer
+              example: 99
+
+    Patents:
+      type: object
+      properties:
+        in_force_by_office_total:
+          type: integer
+          example: 1555
+        country:
+          type: string
+          example: 'Belarus'
+        grants_by_office_resident:
+          type: integer
+          example: 263
+        grants_by_office_total:
+          type: integer
+          example: 316
+        in_force_by_office_change_yoy:
+          type: integer
+          example: -197
+        corporation_name:
+          type: string
+          example: 'grants'
+        grants_by_origin_change_yoy:
+          type: integer
+          example: -252
+        resident:
+          type: integer
+          example: 53
+        grants_by_office_change_yoy:
+          type: integer
+          example: -131
+
+    CorporateFinance:
+      type: object
+      properties:
+        активы:
+          type: integer
+          example: 104437800000
+        траты_на_иссл:
+          type: string
+        выручка:
+          type: integer
+          example: 78100500000
+        corporation_name:
+          type: string
+          example: 'Tata Motors'
+        чистая_выручка:
+          type: integer
+          example: 8882800000
+        зарплата:
+          type: integer
+          example: -8218300000
+        маржа_чистой_прибыли:
+          type: number
+          format: double
+          example: 7.08625424933259
+        соц.расходы:
+          type: integer
+          example: -1005800000
+        copper_law_no._13196:
+          type: string
+        маржа_чистой_выручки:
+          type: number
+          format: double
+          example: 11.3735507455138
+        вычет:
+          type: integer
+          example: -69217700000
+        норма_прибыли:
+          type: number
+          format: double
+          example: 4.86917779836515
+        чистая_прибыль:
+          type: integer
+          example: 5534400000
+        курс_к_доллару:
+          type: number
+          format: double
+          example: 46.62
+        маржа_ebitda:
+          type: number
+          format: double
+          example: 18.2738906921211
+        процент._расходы:
+          type: integer
+          example: -3766100000
+        норма_эксплуатации:
+          type: number
+          format: double
+          example: 59.9993495300355
+        ebitda:
+          type: integer
+          example: 14272000000
+        валюта:
+          type: string
+          example: 'rupee'
+        амортизация:
+          type: integer
+          example: -4922500000
+        подоходный_налог:
+          type: integer
+          example: -49000000
+        другое_(постоянный_капитал):
+          type: string
+        год:
+          type: integer
+          example: 200
+        переменный_капитал:
+          type: integer
+          example: -9224100000
+        постоянный_капитал:
+          type: integer
+        источник:
+          type: string
+          example: 'https://www.tatasteel.com/investors/integrated-reportannual-report/95th-annual-report-2001-2002/95th-annual-report/'
 
     TableInfo:
       type: object

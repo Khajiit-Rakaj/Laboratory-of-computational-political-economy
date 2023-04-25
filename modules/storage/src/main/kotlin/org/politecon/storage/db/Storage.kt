@@ -34,6 +34,7 @@ class Storage(private val objectMapper: ObjectMapper, private val hasher: HashFu
     private val bucketName = "politecon"
     private val scopeName = "_default"
 
+
     /**
      * Persists data to database
      */
@@ -82,11 +83,12 @@ class Storage(private val objectMapper: ObjectMapper, private val hasher: HashFu
             adhoc = false
         )
 
-        cluster.disconnect()
-
         val result = query.execute()
 
+        cluster.disconnect()
+
         return result.rows.map { objectMapper.readValue(it.content, typeRef) }.toSet()
+
     }
 
     suspend fun getTablesList(): Array<TableInfo?> {

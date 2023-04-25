@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.type.TypeReference
 import models.TableInfo
 import org.politecon.common.datamodel.datapoint.PopulationDataPoint
 import org.politecon.common.datamodel.datapoint.SubjectDataPoint
-import org.politecon.common.datamodel.datapoint.PatentsDataPoint
 import org.politecon.storage.db.DbCollection
 import org.politecon.storage.db.Storage
 
@@ -20,8 +19,7 @@ class EconomicsRepo(_storage: Storage) {
     }
 
     suspend fun GetEconomicsData(): Set<SubjectDataPoint> {
-        val result = storage.get(DbCollection.ECONOMICS, object : TypeReference<SubjectDataPoint>() {}, limit = 50)
-        return result
+        return storage.get(DbCollection.ECONOMICS, object : TypeReference<SubjectDataPoint>() {}, limit = 50)
     }
 
     suspend fun GetPopulationData(): Set<PopulationDataPoint> {
