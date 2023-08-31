@@ -10,10 +10,9 @@ public class DataModule : Module
 {
     protected override void Load(ContainerBuilder builder)
     {
-        
-        
-        builder.RegisterType<CouchBaseClientFactory>().As<ICouchBaseClientFactory>().SingleInstance();
+        builder.RegisterGeneric(typeof(CouchBaseClientFactory<>)).As(typeof(ICouchBaseClientFactory<>));
 
         builder.RegisterType<TableRepository>().As<ITablesRepository>();
+        builder.RegisterType<CountryRepository>().As<ICountryRepository>();
     }
 }

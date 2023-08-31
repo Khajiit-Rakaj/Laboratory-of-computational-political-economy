@@ -1,5 +1,7 @@
 ﻿using Autofac;
 using LCPE.Configurations;
+using LCPE.Extensions;
+using LCPE.Interfaces;
 using Microsoft.Extensions.Configuration;
 
 namespace LCPE.DependencyInversionModules;
@@ -19,5 +21,9 @@ public class CommonModule : Module
     {
         builder.Register(x => configuration).As<IConfiguration>().SingleInstance();
         builder.Register(x => couchBaseConfiguration).As<CouchBaseConfiguration>().SingleInstance();
+        
+        builder.RegisterModule(new MiddlewareModule(new LoggerMiddleware()));
+
+        builder.RegisterImplementations<IDataEntity>();
     }
 }

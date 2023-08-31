@@ -19,6 +19,8 @@ builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory())
         DependencyRegistrationHelper.Register(b, builder.Configuration);
     });
 
+LoggerConfiguration.Configure();
+
 builder.Services.AddControllers();
 
 var app = builder.Build();

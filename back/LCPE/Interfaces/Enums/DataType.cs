@@ -1,10 +1,11 @@
 ﻿namespace LCPE.Interfaces.Enums;
 
-public enum DataTypes
+public enum DataType
 {
     StringValue,
     IntValue,
     FloatPointValue,
     DateValue,
-    CompoundValue
+    CompoundValue,
+    Metadata
 }

@@ -1,9 +1,9 @@
 ﻿using LCPE.Data.BaseDataEntities;
-using LCPE.Data.CouchBase;
+using log4net;
 
 namespace LCPE.Data.Interfaces;
 
-public interface IBaseClientFactory<T> where T : IBaseClient
+public interface IBaseClientFactory<T, TModel> where T: IBaseClient<TModel>
 {
-    Task<T> CreateAsync(ConnectionConfiguration connectionConfiguration, IndexConfiguration indexConfiguration);
+    Task<T> CreateAsync(ConnectionConfiguration connectionConfiguration, IndexConfiguration indexConfiguration, ILog log);
 }

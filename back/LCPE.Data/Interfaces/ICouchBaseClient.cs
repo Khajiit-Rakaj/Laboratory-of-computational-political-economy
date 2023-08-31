@@ -2,6 +2,6 @@
 
 namespace LCPE.Data.Interfaces;
 
-public interface ICouchBaseClient : IBaseClient
+public interface ICouchBaseClient<TModel> : IBaseClient<TModel>
 {
 }

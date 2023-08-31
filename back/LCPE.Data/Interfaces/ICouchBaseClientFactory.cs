@@ -1,6 +1,6 @@
 ﻿namespace LCPE.Data.Interfaces;
 
-public interface ICouchBaseClientFactory : IBaseClientFactory<ICouchBaseClient>
+public interface ICouchBaseClientFactory<TModel> : IBaseClientFactory<ICouchBaseClient<TModel>, TModel>
 {
     
 }

@@ -9,6 +9,7 @@ public class BusinessModule : Module
     protected override void Load(ContainerBuilder builder)
     {
         builder.RegisterType<TableService>().As<ITableService>();
+        builder.RegisterType<CountryService>().As<ICountryService>();
     }
 
 }

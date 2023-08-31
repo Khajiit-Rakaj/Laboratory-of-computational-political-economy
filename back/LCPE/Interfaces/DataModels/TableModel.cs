@@ -1,6 +1,6 @@
 ﻿using LCPE.Attributes;
 using LCPE.Constants;
-
+using LCPE.Extensions;
 namespace LCPE.Interfaces.DataModels;
 
 [CouchBaseRelation(DataConstants.Tables)]
@@ -10,15 +10,15 @@ public class TableModel
 
     public int DocumentCount { get; set; }
 
-    public TableDataModel TableDataModel { get; set; }
+    public ICollection<ColumnDataModel> TableDataModel { get; set; }
 
-    public static TableModel Create(string tableName, int documentCount = 0, TableDataModel tableDataModel = null)
+    public static TableModel Create(string tableName, int documentCount = 0, ICollection<ColumnDataModel> tableDataModel = null)
     {
         return new TableModel
         {
             TableName = tableName,
             DocumentCount = documentCount,
-            TableDataModel = tableDataModel ?? TableDataModel.Create()
+            TableDataModel = tableDataModel ?? List.Create<ColumnDataModel>()
         };
     }
 }

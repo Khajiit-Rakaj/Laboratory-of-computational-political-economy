@@ -16,9 +16,9 @@ public class TableListController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> Get()
     {
-        var tables = await tableService.GetTablesAsync();
+        var tables = (await tableService.GetTablesAsync()).ToList();
         
-        return Ok(/*"{\"totalNum\":7,\"tables\":[{\"tableName\":\"countries\",\"docsNum\":1},{\"tableName\":\"patents\",\"docsNum\":275},{\"tableName\":\"economics\",\"docsNum\":1009},{\"tableName\":\"corporate_finance\",\"docsNum\":773},{\"tableName\":\"population_data\",\"docsNum\":258},{\"tableName\":\"commodity_data\",\"docsNum\":18883}]}"*/tables);
+        return Ok(tables);
     }
 
 }
