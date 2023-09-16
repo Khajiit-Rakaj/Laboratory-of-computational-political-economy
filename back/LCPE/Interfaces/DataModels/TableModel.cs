@@ -1,10 +1,12 @@
 ﻿using LCPE.Attributes;
 using LCPE.Constants;
 using LCPE.Extensions;
+
 namespace LCPE.Interfaces.DataModels;
 
 [CouchBaseRelation(DataConstants.Tables)]
-public class TableModel
+[ServiceTable]
+public class TableModel : DataEntity
 {
     public string TableName { get; set; }
 

@@ -24,6 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\LCPE.Data\LCPE.Data.csproj" />
       <ProjectReference Include="..\LCPE\LCPE.csproj" />
     </ItemGroup>
 

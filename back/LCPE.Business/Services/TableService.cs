@@ -14,7 +14,8 @@ public class TableService : ITableService
     public TableService(ITablesRepository repository, IEnumerable<IDataEntity> dataEntities)
     {
         this.repository = repository;
-        entityTableModels = dataEntities.Select(x => TableModel.Create(x.GetCouchBaseRelationCollection(), tableDataModel: x.GetColumnDataModels())).ToList();
+        entityTableModels = dataEntities.Where(x => !x.IsServiceTable()).Select(x =>
+            TableModel.Create(x.GetCouchBaseRelationCollection(), tableDataModel: x.GetColumnDataModels())).ToList();
     }
 
     public async Task<ICollection<TableModel>> GetTablesAsync()
@@ -23,11 +24,11 @@ public class TableService : ITableService
         tables.RemoveAll(x => entityTableModels.All(y => x.TableName != y.TableName));
         var docCount = await repository.GetDocCount(entityTableModels.Select(x => x.TableName));
         tables.ForEach(x =>
-        {
-            x.DocumentCount = docCount[x.TableName];
-            x.TableDataModel = entityTableModels.First(y => y.TableName == x.TableName).TableDataModel;
-        }
-    );
+            {
+                x.DocumentCount = docCount[x.TableName];
+                x.TableDataModel = entityTableModels.First(y => y.TableName == x.TableName).TableDataModel;
+            }
+        );
 
         return tables;
     }

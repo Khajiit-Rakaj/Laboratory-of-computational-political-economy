@@ -1,8 +1,12 @@
-﻿namespace LCPE.Data.Interfaces.Repositories;
+﻿using LCPE.Interfaces.DataModels;
 
-public interface IBaseRepository<T> where T : class
+namespace LCPE.Data.Interfaces.Repositories;
+
+public interface IBaseRepository<TModel, TQuery>
+    where TModel : DataEntity
+    where TQuery : IQuery
 {
-    Task<T> GetAsync(string id);
+    Task<TModel> GetAsync(string id);
     
-    Task<IEnumerable<T>> SearchAsync();
+    Task<IEnumerable<TModel>> SearchAsync(IQueryBuilder<TQuery> queryBuilder);
 }

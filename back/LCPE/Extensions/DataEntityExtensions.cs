@@ -32,4 +32,9 @@ public static class DataEntityExtensions
 
         return result;
     }
+    
+    public static bool IsServiceTable(this IDataEntity dataEntity)
+    {
+        return dataEntity.GetType().GetCustomAttribute<ServiceTableAttribute>() != null;
+    }
 }

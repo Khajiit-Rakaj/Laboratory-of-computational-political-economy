@@ -14,12 +14,15 @@ public class ConfigurationExtensionsTests
         context = new ConfigurationExtensionsTestsContext();
     }
 
-    [Ignore("requires mock tuneup")]
     [Test]
-    public void m_i_r()
+    public void GetListValues_ConfigurationWithListOfStringsIsProvided_ListOfStringIsReturned()
     {
         context.SetupConfiguration();
 
         var result = context.Configuration.GetListValues<string>(ConfigurationExtensionsTestsContext.ConfigName);
+        
+        context
+            .ResultEqualsToExpected(result)
+            .Assert();
     }
 }

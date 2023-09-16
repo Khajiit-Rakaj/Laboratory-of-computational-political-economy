@@ -1,17 +1,18 @@
 ﻿using Couchbase.KeyValue;
-using Couchbase.Lite.Query;
-using Couchbase.Query;
 using LCPE.Data.Interfaces;
 using LCPE.Extensions;
 using LCPE.Interfaces.DataModels;
 using log4net;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using NotImplementedException = System.NotImplementedException;
 
 namespace LCPE.Data.CouchBase;
 
 public class CouchBaseClient<TModel> : ICouchBaseClient<TModel>
+    where TModel : DataEntity
 {
+    public string TablePlaceHolder => "<table_name>";
+    
     private readonly ICouchbaseCollection collection;
     private readonly IScope scope;
     private readonly ILog log;
@@ -64,18 +65,42 @@ public class CouchBaseClient<TModel> : ICouchBaseClient<TModel>
         return default;
     }
 
-    class CountryResults
+    public async Task<IEnumerable<TModel>> SearchAsync(object queryObject)
     {
-        public Country Countries { get; set; }
+        var query = queryObject as string;
+
+        ValidateQuery(query);
+        query = AppendTargetTableName(query);
+
+        try
+        {
+            var dynamicResult = await scope.QueryAsync<dynamic>(query);
+
+            var result = await dynamicResult
+                .Select(x => (TModel)JObject.FromObject(x)[collection.Name].ToObject<TModel>())
+                .ToListAsync();
+
+            return result;
+        }
+        catch (Exception e)
+        {
+            log.Error($"Failed to fetch data with query: {query}");
+            log.Error(e);
+            throw;
+        }
     }
 
-    public async Task<IEnumerable<TModel>> SearchAsync()
+    private string AppendTargetTableName(string query)
     {
-        var dynamicResult = await scope.QueryAsync<dynamic>($"Select * from {collection.Name}");
-        var result = await dynamicResult.Select(x => (TModel)JObject.FromObject(x)[collection.Name].ToObject<TModel>())
-            .ToListAsync();
+        return query.Replace(TablePlaceHolder, collection.Name);
+    }
 
-        return result;
+    private void ValidateQuery(string? query)
+    {
+        if (string.IsNullOrEmpty(query))
+        {
+            throw new ArgumentException("Query can't be null");
+        }
     }
 
     #region Static constructor
