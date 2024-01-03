@@ -3,17 +3,20 @@ using LCPE.Data.Interfaces.Repositories;
 using LCPE.Extensions;
 using LCPE.Interfaces;
 using LCPE.Interfaces.DataModels;
+using log4net;
 
 namespace LCPE.Business.Services;
 
 public class TableService : ITableService
 {
     private readonly ITablesRepository repository;
+    private readonly ILog log;
     private readonly IEnumerable<TableModel> entityTableModels;
 
-    public TableService(ITablesRepository repository, IEnumerable<IDataEntity> dataEntities)
+    public TableService(ITablesRepository repository, IEnumerable<IDataEntity> dataEntities, ILog log)
     {
         this.repository = repository;
+        this.log = log;
         entityTableModels = dataEntities.Where(x => !x.IsServiceTable()).Select(x =>
             TableModel.Create(x.GetCouchBaseRelationCollection(), tableDataModel: x.GetColumnDataModels())).ToList();
     }
@@ -22,7 +25,15 @@ public class TableService : ITableService
     {
         var tables = (await repository.GetTablesAsync()).ToList();
         tables.RemoveAll(x => entityTableModels.All(y => x.TableName != y.TableName));
-        var docCount = await repository.GetDocCount(entityTableModels.Select(x => x.TableName));
+
+        if (tables.Count != entityTableModels.Count())
+        {
+            var missingTables = entityTableModels.Select(x => x.TableName).Except(tables.Select(t => t.TableName));
+
+            log.Error($"Missing table(s): {string.Join(", ", missingTables)}");
+        }
+
+        var docCount = await repository.GetDocCount(tables.Select(x => x.TableName));
         tables.ForEach(x =>
             {
                 x.DocumentCount = docCount[x.TableName];

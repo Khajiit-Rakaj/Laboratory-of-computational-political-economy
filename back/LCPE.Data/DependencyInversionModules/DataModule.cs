@@ -14,5 +14,6 @@ public class DataModule : Module
 
         builder.RegisterType<TableRepository>().As<ITablesRepository>();
         builder.RegisterType<CountryRepository>().As<ICountryRepository>();
+        builder.RegisterType<CorporationFinancesRepository>().As<ICorporationFinancesRepository>();
     }
 }

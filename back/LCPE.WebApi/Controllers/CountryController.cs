@@ -1,12 +1,12 @@
 ﻿using LCPE.Business.Interfaces.Services;
+using LCPE.Constants;
 using LCPE.Data.Queries;
 using LCPE.Data.QueryBuilders.Couchbase;
-using LCPE.Interfaces.DataModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
 
-[Route("api/Country")]
+[Route($"api/{DataConstants.Country}")]
 public class CountryController : Controller
 {
     private readonly ICountryService countryService;
@@ -22,7 +22,7 @@ public class CountryController : Controller
     {
         var queryBuilder = CouchBaseQueryBuilder<CountryQuery>.Create();
         
-        var result = await countryService.SearchAsync(queryBuilder);
+        var result = await countryService.GetWorkTableViewModel(queryBuilder);
 
         return Ok(result);
     }

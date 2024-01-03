@@ -32,6 +32,22 @@ public static class DataEntityExtensions
 
         return result;
     }
+
+    public static ICollection<ColumnDataModel> GetColumnDataModels(this Type dataEntity,
+        bool onlyPresentable = true)
+    {
+        var properties = dataEntity.GetProperties().Where(x =>
+            x.GetCustomAttribute<PresentableFieldAttribute>() != null ||
+            !onlyPresentable && x.GetCustomAttribute<ServiceFieldAttribute>() != null);
+
+        var result = properties.Select(x => ColumnDataModel.Create(x.Name,
+            x.GetCustomAttribute<PresentableFieldAttribute>()?.DataType ??
+            x.GetCustomAttribute<ServiceFieldAttribute>()!.DataType,
+            x.GetCustomAttribute<PresentableFieldAttribute>() != null,
+            string.Empty)).ToList();
+
+        return result;
+    }
     
     public static bool IsServiceTable(this IDataEntity dataEntity)
     {

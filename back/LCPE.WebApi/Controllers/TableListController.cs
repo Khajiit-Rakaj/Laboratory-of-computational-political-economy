@@ -1,8 +1,4 @@
 ﻿using LCPE.Business.Interfaces.Services;
-using LCPE.Data.Queries;
-using LCPE.Data.Queries.SearchFields;
-using LCPE.Data.QueryBuilders.Couchbase;
-using LCPE.Extensions;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
