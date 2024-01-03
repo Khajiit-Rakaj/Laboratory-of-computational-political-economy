@@ -1,4 +1,5 @@
-export interface IFieldDescription{
+export interface IColumnDataModel {
     name: string
-    type: string
+    dataType: string
+    unknownValueStub?: string
 }

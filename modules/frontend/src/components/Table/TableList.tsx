@@ -1,24 +1,34 @@
 import React, {useEffect} from "react";
-import {fetchTablesData} from "../../reducers/tableReducer";
+import {fetchFetchableTables, setActiveTable} from "../../reducers/tableReducer";
 import {useAppDispatch, useAppSelector} from "../../store/store";
+import {fetchTableData} from "../../reducers/workTableReducer";
 
 function TableList(): JSX.Element {
     const {tables, loading} = useAppSelector((state) => state.tables);
     const tableDispatch = useAppDispatch();
 
     useEffect(() => {
-        tableDispatch(fetchTablesData());
+        tableDispatch(fetchFetchableTables());
     }, [tableDispatch])
+
+    const setWorkTableState = (e: string) => {
+        setActiveTable(e);
+        tableDispatch(fetchTableData(e));
+    }
+
+    const emptyOption = [<option key={-1}>{'Select work table'}</option>];
 
     return (
         <div>
-            <select name="Tables" size={-1}>
+            <select name="Tables" size={-1} onChange={e => setWorkTableState(e.target.value)}>
                 {!loading && tables
-                    ? tables?.map(item => (
+                    ? emptyOption.concat(tables?.map(item => (
                         <option key={item.tableName} value={item.tableName}>
                             {item.tableName}({item.documentCount})
-                        </option>))
-                    : ['pending data']
+                        </option>)))
+                    : <option>
+                        {'pending data...'}
+                    </option>
                 }
             </select>
         </div>

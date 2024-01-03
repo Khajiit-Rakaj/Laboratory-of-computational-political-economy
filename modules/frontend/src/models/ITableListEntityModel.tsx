@@ -1,7 +1,7 @@
-import {IFieldDescription} from "./IFieldDescription";
+import {IColumnDataModel} from "./IColumnDataModel";
 
 export interface ITableListEntityModel {
     tableName: string
     documentCount: number
-    tableDataModel: IFieldDescription[]
+    tableDataModel: IColumnDataModel[]
 }
