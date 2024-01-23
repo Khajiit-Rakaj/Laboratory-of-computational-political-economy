@@ -9,7 +9,7 @@ using log4net;
 namespace LCPE.Data.Repository;
 
 public class CorporationFinancesRepository : BaseCouchBaseRepository<CorporationFinances, CorporationFinancesQuery>,
-    ICorporationFinancesRepository
+    ICorporationFinancesRepository, ICheckableRepository
 {
     public CorporationFinancesRepository(ICouchBaseClientFactory<CorporationFinances> clientFactory,
         CouchBaseConfiguration options, ILog log) : base(clientFactory, options, log)
@@ -42,6 +42,6 @@ public class CorporationFinancesRepository : BaseCouchBaseRepository<Corporation
 
     public Task<CorporationFinances> GetAsync(string id)
     {
-        return client.GetAsync(id);
+        return Client.GetAsync(id);
     }
 }

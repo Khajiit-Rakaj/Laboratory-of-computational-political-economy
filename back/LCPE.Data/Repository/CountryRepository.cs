@@ -9,7 +9,7 @@ using log4net;
 
 namespace LCPE.Data.Repository;
 
-public class CountryRepository : BaseCouchBaseRepository<Country, CountryQuery>, ICountryRepository
+public class CountryRepository : BaseCouchBaseRepository<Country, CountryQuery>, ICountryRepository, ICheckableRepository
 {
     public CountryRepository(ICouchBaseClientFactory<Country> clientFactory, CouchBaseConfiguration options, ILog log) :
         base(clientFactory, options, log)
@@ -18,7 +18,7 @@ public class CountryRepository : BaseCouchBaseRepository<Country, CountryQuery>,
 
     public Task<Country> GetAsync(string id)
     {
-        return client.GetAsync(id);
+        return Client.GetAsync(id);
     }
 
     protected override string GetOrdering(CountryQuery query)

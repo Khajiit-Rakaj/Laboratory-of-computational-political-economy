@@ -25,12 +25,12 @@ public abstract class BaseCouchBaseRepository<TModel, TQuery> : BaseRepository<T
         var ordering = GetOrdering(queryBuilder.Query);
         var paging = GetPaging(queryBuilder.Query);
 
-        var query = $"select {returnFields} from {client.TablePlaceHolder}" +
+        var query = $"select {returnFields} from {Client.TablePlaceHolder}" +
                     $"{(searchFields.IsNotNullOrWhiteSpace() ? $" where {searchFields}" : string.Empty)}" +
                     $"{(ordering.IsNotNullOrWhiteSpace() ? $" order by {ordering}" : string.Empty)}" +
                     $"{paging}" as object;
 
-        return client.SearchAsync(query);
+        return Client.SearchAsync(query);
     }
 
     private string GetPaging(TQuery queryBuilderQuery)

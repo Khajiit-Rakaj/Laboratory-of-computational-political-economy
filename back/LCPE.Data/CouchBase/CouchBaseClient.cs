@@ -67,7 +67,12 @@ public class CouchBaseClient<TModel> : ICouchBaseClient<TModel>
 
     public async Task<IEnumerable<TModel>> SearchAsync(object queryObject)
     {
-        var query = queryObject as string;
+
+        if (queryObject is not string query)
+        {
+            log.Error($"Failed to stringify query");
+            return List.Create<TModel>();
+        }
 
         ValidateQuery(query);
         query = AppendTargetTableName(query);
@@ -95,7 +100,7 @@ public class CouchBaseClient<TModel> : ICouchBaseClient<TModel>
         return query.Replace(TablePlaceHolder, collection.Name);
     }
 
-    private void ValidateQuery(string? query)
+    private static void ValidateQuery(string? query)
     {
         if (string.IsNullOrEmpty(query))
         {

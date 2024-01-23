@@ -16,14 +16,14 @@ public class TableRepository : BaseRepository<TableModel>, ITablesRepository
 
     public async Task<ICollection<TableModel>> GetTablesAsync()
     {
-        var result = (await client.GetTablesAsync()).ToList();
+        var result = (await Client.GetTablesAsync()).ToList();
 
         return result;
     }
 
     public Task<IDictionary<string, int>> GetDocCount(IEnumerable<string> tables)
     {
-        var result = client.GetDocCountAsync(tables);
+        var result = Client.GetDocCountAsync(tables);
         
         return result;
     }

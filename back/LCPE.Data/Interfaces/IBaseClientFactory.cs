@@ -10,4 +10,6 @@ public interface IBaseClientFactory<T, TModel>
 {
     Task<T> CreateAsync(ConnectionConfiguration connectionConfiguration, IndexConfiguration indexConfiguration,
         ILog log);
+
+    Task<bool> CheckConnection(ConnectionConfiguration connectionConfiguration);
 }

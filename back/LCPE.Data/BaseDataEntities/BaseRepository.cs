@@ -9,15 +9,28 @@ namespace LCPE.Data.BaseDataEntities;
 public abstract class BaseRepository<TModel>
     where TModel : DataEntity
 {
-    protected IBaseClient<TModel> client;
+    protected readonly IBaseClient<TModel> Client;
+    private readonly string collectionName;
+    private readonly ConnectionConfiguration connectionConfiguration;
+    private readonly ICouchBaseClientFactory<TModel> clientFactory;
 
     protected BaseRepository(ICouchBaseClientFactory<TModel> clientFactory, CouchBaseConfiguration options, ILog log)
     {
-        var collectionName = typeof(TModel).GetCouchBaseRelationCollection();
+        collectionName = typeof(TModel).GetCouchBaseRelationCollection();
+        this.clientFactory = clientFactory;
 
-        var connectionConfiguration = ConnectionConfiguration.Create(options.Server, options.UserName,
+        connectionConfiguration = ConnectionConfiguration.Create(options.Server, options.UserName,
             options.Password, options.CouchBaseOptions.DefaultBucket);
         var indexConfiguration = IndexConfiguration.Create(options.CouchBaseOptions.DefaultScope, collectionName);
-        client = clientFactory.CreateAsync(connectionConfiguration, indexConfiguration, log).Result;
+        Client = this.clientFactory.CreateAsync(connectionConfiguration, indexConfiguration, log).Result;
     }
+
+    public async Task<bool> CheckState()
+    {
+        var result = await clientFactory.CheckConnection(connectionConfiguration);
+
+        return result;
+    }
+
+    public Type GetDataModel => typeof(TModel); 
 }

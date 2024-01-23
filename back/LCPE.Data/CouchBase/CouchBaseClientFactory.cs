@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 
 namespace LCPE.Data.CouchBase;
 
-public class CouchBaseClientFactory<TModel> : BaseClientFactory<ICouchBaseClient<TModel>, TModel>,
+public class CouchBaseClientFactory<TModel> : BaseClientFactory<ICouchBaseClient<TModel>>,
     ICouchBaseClientFactory<TModel>
     where TModel : DataEntity
 {
@@ -31,5 +31,23 @@ public class CouchBaseClientFactory<TModel> : BaseClientFactory<ICouchBaseClient
         var collection = await scope.CollectionAsync(indexConfiguration.Index);
 
         return CouchBaseClient<TModel>.Create(collection, scope, log);
+    }
+
+    protected override async Task<bool> CheckConnectionToDataBase(ConnectionConfiguration connectionConfiguration)
+    {
+        var options = new ClusterOptions
+        {
+            UserName = connectionConfiguration.User,
+            Password = connectionConfiguration.Password
+        };
+        
+        var cluster = await Cluster.ConnectAsync($"couchbase://{connectionConfiguration.ConnectionEndpoint}", options);
+
+        var pingResult = await cluster.PingAsync();
+        var diagnosticResult = await cluster.DiagnosticsAsync();
+
+        await cluster.DisposeAsync();
+
+        return true;
     }
 }
