@@ -12,6 +12,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\Unit
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Testing", "Testing", "{FB1C4C52-52EA-4B57-AB3E-D11DBD79A7F3}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "InfrastructureBuilder", "InfrastructureBuilder", "{C3F628CA-1FF0-435D-8388-09A64B624E90}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LCPE.InfrastructureBuilder", "LCPE.InfrastructureBuilder\LCPE.InfrastructureBuilder.csproj", "{A8354394-3C14-4425-A1F4-DBEB4CB5262D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -38,8 +42,13 @@ Global
 		{E27F4BA0-71F8-4A6C-91A0-6FA08A01D2B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E27F4BA0-71F8-4A6C-91A0-6FA08A01D2B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E27F4BA0-71F8-4A6C-91A0-6FA08A01D2B6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8354394-3C14-4425-A1F4-DBEB4CB5262D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8354394-3C14-4425-A1F4-DBEB4CB5262D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8354394-3C14-4425-A1F4-DBEB4CB5262D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8354394-3C14-4425-A1F4-DBEB4CB5262D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{E27F4BA0-71F8-4A6C-91A0-6FA08A01D2B6} = {FB1C4C52-52EA-4B57-AB3E-D11DBD79A7F3}
+		{A8354394-3C14-4425-A1F4-DBEB4CB5262D} = {C3F628CA-1FF0-435D-8388-09A64B624E90}
 	EndGlobalSection
 EndGlobal
