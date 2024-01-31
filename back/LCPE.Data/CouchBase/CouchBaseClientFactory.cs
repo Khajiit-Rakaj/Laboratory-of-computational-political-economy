@@ -1,5 +1,8 @@
 ﻿using Couchbase;
+using Couchbase.KeyValue;
+using LCPE.Constants;
 using LCPE.Data.BaseDataEntities;
+using LCPE.Data.Helpers;
 using LCPE.Data.Interfaces;
 using LCPE.Interfaces.DataModels;
 using LCPE.Logging;
@@ -25,29 +28,26 @@ public class CouchBaseClientFactory<TModel> : BaseClientFactory<ICouchBaseClient
         }.WithLogging(loggerFactory);
 
         var cluster = await Cluster.ConnectAsync($"couchbase://{connectionConfiguration.ConnectionEndpoint}", options);
-        var bucket = await cluster.BucketAsync(connectionConfiguration.Bucket);
+        IScope scope = default;
+        ICouchbaseCollection collection = default;
+        try
+        {
+            var bucket = await cluster.BucketAsync(connectionConfiguration.Bucket);
 
-        var scope = await bucket.ScopeAsync(indexConfiguration.Scope);
-        var collection = await scope.CollectionAsync(indexConfiguration.Index);
+            scope = await bucket.ScopeAsync(indexConfiguration.Scope);
+            collection = await scope.CollectionAsync(indexConfiguration.Index);
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e);
+        }
 
-        return CouchBaseClient<TModel>.Create(collection, scope, log);
+        return CouchBaseClient<TModel>.Create(collection, scope, cluster, connectionConfiguration, indexConfiguration, log);
     }
 
-    protected override async Task<bool> CheckConnectionToDataBase(ConnectionConfiguration connectionConfiguration)
+    protected override async Task<DiagnosticResultsType> CheckConnectionToDataBase(
+        ConnectionConfiguration connectionConfiguration, IndexConfiguration indexConfiguration)
     {
-        var options = new ClusterOptions
-        {
-            UserName = connectionConfiguration.User,
-            Password = connectionConfiguration.Password
-        };
-        
-        var cluster = await Cluster.ConnectAsync($"couchbase://{connectionConfiguration.ConnectionEndpoint}", options);
-
-        var pingResult = await cluster.PingAsync();
-        var diagnosticResult = await cluster.DiagnosticsAsync();
-
-        await cluster.DisposeAsync();
-
-        return true;
+        return await CouchBaseCheckHelper.Check(connectionConfiguration, indexConfiguration);
     }
 }

@@ -6,7 +6,6 @@ using InfrastructureBuilder.DependencyInversionModules;
 using Microsoft.Extensions.Configuration;
 
 args.ToList().ForEach(Console.WriteLine);
-Console.WriteLine("Hello, World!");
 var builder = new ContainerBuilder();
 var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json", false, true).Build();
 DependencyRegistrationHelper.Register(builder, configuration);

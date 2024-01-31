@@ -1,4 +1,5 @@
 ﻿using System.Collections.Concurrent;
+using LCPE.Constants;
 using LCPE.Data.Interfaces;
 using log4net;
 
@@ -18,12 +19,12 @@ public abstract class BaseClientFactory<T>
     protected abstract Task<T> CreateClient(ConnectionConfiguration connectionConfiguration,
         IndexConfiguration indexConfiguration, ILog log);
 
-    public async Task<bool> CheckConnection(ConnectionConfiguration connectionConfiguration)
+    public async Task<DiagnosticResultsType> CheckConnection(ConnectionConfiguration connectionConfiguration, IndexConfiguration indexConfiguration)
     {
-        var result = await CheckConnectionToDataBase(connectionConfiguration);
+        var result = await CheckConnectionToDataBase(connectionConfiguration, indexConfiguration);
         
         return result;
     }
 
-    protected abstract Task<bool> CheckConnectionToDataBase(ConnectionConfiguration connectionConfiguration);
+    protected abstract Task<DiagnosticResultsType> CheckConnectionToDataBase(ConnectionConfiguration connectionConfiguration, IndexConfiguration indexConfiguration);
 }

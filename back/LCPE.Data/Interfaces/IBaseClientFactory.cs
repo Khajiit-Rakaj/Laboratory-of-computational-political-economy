@@ -1,4 +1,5 @@
-﻿using LCPE.Data.BaseDataEntities;
+﻿using LCPE.Constants;
+using LCPE.Data.BaseDataEntities;
 using LCPE.Interfaces.DataModels;
 using log4net;
 
@@ -11,5 +12,5 @@ public interface IBaseClientFactory<T, TModel>
     Task<T> CreateAsync(ConnectionConfiguration connectionConfiguration, IndexConfiguration indexConfiguration,
         ILog log);
 
-    Task<bool> CheckConnection(ConnectionConfiguration connectionConfiguration);
+    Task<DiagnosticResultsType> CheckConnection(ConnectionConfiguration connectionConfiguration, IndexConfiguration indexConfiguration);
 }

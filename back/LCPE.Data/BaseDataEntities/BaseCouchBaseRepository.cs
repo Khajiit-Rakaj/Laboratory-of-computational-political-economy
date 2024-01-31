@@ -18,6 +18,11 @@ public abstract class BaseCouchBaseRepository<TModel, TQuery> : BaseRepository<T
     {
     }
 
+    public async Task<bool> RestoreIndexAsync()
+    {
+        return await Client.CreateCollectionAsync();
+    }
+    
     public virtual Task<IEnumerable<TModel>> SearchAsync(IQueryBuilder<TQuery> queryBuilder)
     {
         var returnFields = GetReturnFields(queryBuilder.Query.ReturnFields);

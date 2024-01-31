@@ -1,4 +1,5 @@
 ﻿using LCPE.Configurations;
+using LCPE.Constants;
 using LCPE.Data.Interfaces;
 using LCPE.Extensions;
 using LCPE.Interfaces.DataModels;
@@ -13,6 +14,7 @@ public abstract class BaseRepository<TModel>
     private readonly string collectionName;
     private readonly ConnectionConfiguration connectionConfiguration;
     private readonly ICouchBaseClientFactory<TModel> clientFactory;
+    private readonly IndexConfiguration indexConfiguration;
 
     protected BaseRepository(ICouchBaseClientFactory<TModel> clientFactory, CouchBaseConfiguration options, ILog log)
     {
@@ -21,13 +23,21 @@ public abstract class BaseRepository<TModel>
 
         connectionConfiguration = ConnectionConfiguration.Create(options.Server, options.UserName,
             options.Password, options.CouchBaseOptions.DefaultBucket);
-        var indexConfiguration = IndexConfiguration.Create(options.CouchBaseOptions.DefaultScope, collectionName);
-        Client = this.clientFactory.CreateAsync(connectionConfiguration, indexConfiguration, log).Result;
+        indexConfiguration = IndexConfiguration.Create(options.CouchBaseOptions.DefaultScope, collectionName);
+        try
+        {
+            Client = this.clientFactory.CreateAsync(connectionConfiguration, indexConfiguration, log).Result;
+        }
+        catch (Exception e)
+        {
+            log.Error($"Failed to create repository client\n{e.Message}");
+            Client = default;
+        }
     }
 
-    public async Task<bool> CheckState()
+    public async Task<DiagnosticResultsType> CheckState()
     {
-        var result = await clientFactory.CheckConnection(connectionConfiguration);
+        var result = await clientFactory.CheckConnection(connectionConfiguration, indexConfiguration);
 
         return result;
     }

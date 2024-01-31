@@ -1,8 +1,12 @@
-﻿namespace LCPE.Data.Interfaces.Repositories;
+﻿using LCPE.Constants;
+
+namespace LCPE.Data.Interfaces.Repositories;
 
 public interface ICheckableRepository
 {
-    Task<bool> CheckState();
+    Task<DiagnosticResultsType> CheckState();
+
+    Task<bool> RestoreIndexAsync();
 
     public Type GetDataModel { get; }
 }

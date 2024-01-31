@@ -1,10 +1,15 @@
-﻿using Couchbase.KeyValue;
+﻿using Couchbase;
+using Couchbase.KeyValue;
+using Couchbase.Management.Buckets;
+using Couchbase.Management.Collections;
+using LCPE.Data.BaseDataEntities;
+using LCPE.Data.Helpers;
 using LCPE.Data.Interfaces;
 using LCPE.Extensions;
+using LCPE.Helpers;
 using LCPE.Interfaces.DataModels;
 using log4net;
 using Newtonsoft.Json.Linq;
-using NotImplementedException = System.NotImplementedException;
 
 namespace LCPE.Data.CouchBase;
 
@@ -12,15 +17,23 @@ public class CouchBaseClient<TModel> : ICouchBaseClient<TModel>
     where TModel : DataEntity
 {
     public string TablePlaceHolder => "<table_name>";
-    
+
     private readonly ICouchbaseCollection collection;
     private readonly IScope scope;
+    private readonly ICluster cluster;
+    private readonly ConnectionConfiguration connectionConfiguration;
+    private readonly IndexConfiguration indexConfiguration;
     private readonly ILog log;
+    private readonly int limitQuota = 128;
 
-    private CouchBaseClient(ICouchbaseCollection collection, IScope scope, ILog log)
+    private CouchBaseClient(ICouchbaseCollection collection, IScope scope, ICluster cluster,
+        ConnectionConfiguration connectionConfiguration, IndexConfiguration indexConfiguration, ILog log)
     {
         this.collection = collection;
         this.scope = scope;
+        this.cluster = cluster;
+        this.connectionConfiguration = connectionConfiguration;
+        this.indexConfiguration = indexConfiguration;
         this.log = log;
     }
 
@@ -67,7 +80,6 @@ public class CouchBaseClient<TModel> : ICouchBaseClient<TModel>
 
     public async Task<IEnumerable<TModel>> SearchAsync(object queryObject)
     {
-
         if (queryObject is not string query)
         {
             log.Error($"Failed to stringify query");
@@ -95,6 +107,24 @@ public class CouchBaseClient<TModel> : ICouchBaseClient<TModel>
         }
     }
 
+    public async Task<bool> CreateCollectionAsync()
+    {
+        var cbBucket =
+            await CouchBaseInfrastructureHelper.GetOrCreateBucketAsync(cluster, connectionConfiguration.Bucket,
+                limitQuota);
+        var cbScope = await CouchBaseInfrastructureHelper.GetOrCreateScopeAsync(cbBucket, indexConfiguration.Scope);
+        var cbCollection =
+            await CouchBaseInfrastructureHelper.GetOrCreateCollectionAsync(cbBucket, indexConfiguration.Scope, indexConfiguration.Index);
+        
+        if (cbCollection == default)
+        {
+            log.Error($"failed to create {connectionConfiguration.ConnectionEndpoint}" +
+                      $".{connectionConfiguration.Bucket}.{indexConfiguration.Scope}.{indexConfiguration.Index}");
+        }
+
+        return cbCollection != default;
+    }
+
     private string AppendTargetTableName(string query)
     {
         return query.Replace(TablePlaceHolder, collection.Name);
@@ -110,9 +140,11 @@ public class CouchBaseClient<TModel> : ICouchBaseClient<TModel>
 
     #region Static constructor
 
-    public static CouchBaseClient<TModel> Create(ICouchbaseCollection collection, IScope scope, ILog log)
+    public static CouchBaseClient<TModel> Create(ICouchbaseCollection collection, IScope scope, ICluster cluster,
+        ConnectionConfiguration connectionConfiguration, IndexConfiguration indexConfiguration, ILog log)
     {
-        return new CouchBaseClient<TModel>(collection, scope, log);
+        return new CouchBaseClient<TModel>(collection, scope, cluster, connectionConfiguration, indexConfiguration,
+            log);
     }
 
     #endregion Static constructor

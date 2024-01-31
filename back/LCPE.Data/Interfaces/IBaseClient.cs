@@ -14,5 +14,6 @@ public interface IBaseClient<TModel>
     Task<TModel?> GetAsync(string id);
 
     Task<IEnumerable<TModel>> SearchAsync(object queryObject);
-    
+
+    Task<bool> CreateCollectionAsync();
 }
