@@ -3,13 +3,13 @@ using Couchbase.Diagnostics;
 using Couchbase.KeyValue;
 using Couchbase.Management.Buckets;
 using Couchbase.Management.Collections;
+using Couchbase.Management.Query;
 
 namespace LCPE.Data.Helpers;
 
 public static class CouchBaseInfrastructureHelper
 {
-    private static int bucketWaitDelay = 20000;
-    private static int defaultDelay = 1000;
+    private const int DefaultDelay = 1000;
 
     public static async Task<IBucket> GetOrCreateBucketAsync(ICluster cluster, string buketName, int bucketSize)
     {
@@ -26,8 +26,8 @@ public static class CouchBaseInfrastructureHelper
                 BucketType = BucketType.Couchbase,
                 RamQuotaMB = bucketSize
             });
-            await Task.Delay(TimeSpan.FromMilliseconds(defaultDelay));
-            await cluster.WaitUntilReadyAsync(TimeSpan.FromMilliseconds(defaultDelay), new WaitUntilReadyOptions(){});
+            await Task.Delay(TimeSpan.FromMilliseconds(DefaultDelay));
+            await cluster.WaitUntilReadyAsync(TimeSpan.FromMilliseconds(DefaultDelay), new WaitUntilReadyOptions(){});
         }
 
         cbBuckets = await bucketManager.GetAllBucketsAsync();
@@ -46,7 +46,7 @@ public static class CouchBaseInfrastructureHelper
         if (cbScopes.All(x => x.Name != scopeName))
         {
             await collectionManager.CreateScopeAsync(scopeName);
-            await cbBucket.WaitUntilReadyAsync(TimeSpan.FromMilliseconds(defaultDelay)).WaitAsync(TimeSpan.FromMilliseconds(defaultDelay));
+            await cbBucket.WaitUntilReadyAsync(TimeSpan.FromMilliseconds(DefaultDelay)).WaitAsync(TimeSpan.FromMilliseconds(DefaultDelay));
         }
 
         cbScope = await cbBucket.ScopeAsync(scopeName);
@@ -65,8 +65,9 @@ public static class CouchBaseInfrastructureHelper
                 .All(x => x.Name != indexName))
         {
             await collectionManager.CreateCollectionAsync(new CollectionSpec(scopeName, indexName));
-            await cbBucket.WaitUntilReadyAsync(TimeSpan.FromMilliseconds(defaultDelay)).WaitAsync(TimeSpan.FromMilliseconds(defaultDelay));
+            await cbBucket.WaitUntilReadyAsync(TimeSpan.FromMilliseconds(DefaultDelay)).WaitAsync(TimeSpan.FromMilliseconds(DefaultDelay));
             cbCollection = await cbBucket.CollectionAsync(indexName);
+            await cbCollection.QueryIndexes.CreatePrimaryIndexAsync(new CreatePrimaryQueryIndexOptions());
         }
 
         return cbCollection;
