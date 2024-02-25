@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net7.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Common.Logging.Log4Net.Universal" Version="1.2.0" />
+      <PackageReference Include="Couchbase.Lite" Version="3.1.1" />
+      <PackageReference Include="CouchbaseNetClient" Version="3.4.10" />
+      <PackageReference Include="log4net" Version="2.0.15" />
+      <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0-preview.7.23375.6" />
+      <PackageReference Include="Microsoft.Extensions.Options" Version="8.0.0-preview.7.23375.6" />
+      <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\LCPE\LCPE.csproj" />
+    </ItemGroup>
+
+</Project>

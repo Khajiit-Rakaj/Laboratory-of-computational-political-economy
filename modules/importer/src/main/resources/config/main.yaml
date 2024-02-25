@@ -1,7 +1,0 @@
-local:
-  db:
-    url: couchbase://127.0.0.1
-    username: politecon
-    password: politecon
-    bucket: politecon
-    scope: _default
