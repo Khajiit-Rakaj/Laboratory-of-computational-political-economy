@@ -27,6 +27,7 @@ curl -v -u Admin:rootPass -X POST http://127.0.0.1:8091/pools/default/buckets/po
 curl -v -u Admin:rootPass -X POST http://127.0.0.1:8091/pools/default/buckets/politecon/scopes/_default/collections -d name=corporate_finance
 curl -v -u Admin:rootPass -X POST http://127.0.0.1:8091/pools/default/buckets/politecon/scopes/_default/collections -d name=economics
 curl -v -u Admin:rootPass -X POST http://127.0.0.1:8091/pools/default/buckets/politecon/scopes/_default/collections -d name=patents
+curl -v -u Admin:rootPass -X POST http://127.0.0.1:8091/pools/default/buckets/politecon/scopes/_default/collections -d name=countries
 
 echo "\n\nCreating collections primary indices\n"
 
@@ -35,6 +36,7 @@ curl -v -u Admin:rootPass -X POST http://127.0.0.1:8093/query/service?statement=
 curl -v -u Admin:rootPass -X POST http://127.0.0.1:8093/query/service?statement=create%20primary%20index%20on%20default:politecon._default.corporate_finance
 curl -v -u Admin:rootPass -X POST http://127.0.0.1:8093/query/service?statement=create%20primary%20index%20on%20default:politecon._default.economics
 curl -v -u Admin:rootPass -X POST http://127.0.0.1:8093/query/service?statement=create%20primary%20index%20on%20default:politecon._default.patents
+curl -v -u Admin:rootPass -X POST http://127.0.0.1:8093/query/service?statement=create%20primary%20index%20on%20default:politecon._default.countries
 
 curl -v -u Admin:rootPass -X GET http://127.0.0.1:8091/pools/default/buckets/politecon/scopes/
 

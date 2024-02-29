@@ -107,6 +107,12 @@ public class CouchBaseClient<TModel> : ICouchBaseClient<TModel>
         }
     }
 
+    public async Task CreateAsync(IEnumerable<TModel> entities)
+    {
+        await entities.ToAsyncEnumerable()
+            .ForEachAwaitAsync(entity => collection.InsertAsync(entity.Id ?? Guid.NewGuid().ToString(), entity));
+    }
+
     public async Task<bool> CreateCollectionAsync()
     {
         var cbBucket =
@@ -114,8 +120,9 @@ public class CouchBaseClient<TModel> : ICouchBaseClient<TModel>
                 limitQuota);
         var cbScope = await CouchBaseInfrastructureHelper.GetOrCreateScopeAsync(cbBucket, indexConfiguration.Scope);
         var cbCollection =
-            await CouchBaseInfrastructureHelper.GetOrCreateCollectionAsync(cbBucket, indexConfiguration.Scope, indexConfiguration.Index);
-        
+            await CouchBaseInfrastructureHelper.GetOrCreateCollectionAsync(cbBucket, indexConfiguration.Scope,
+                indexConfiguration.Index);
+
         if (cbCollection == default)
         {
             log.Error($"failed to create {connectionConfiguration.ConnectionEndpoint}" +

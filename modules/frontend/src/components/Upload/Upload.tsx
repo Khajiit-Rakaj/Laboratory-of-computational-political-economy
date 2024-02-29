@@ -1,40 +1,23 @@
-import styles from "./Table.module.css"
-import DataTable, {TableColumn} from "react-data-table-component"
-import DATA from "../../data/corp_finance.json"
+﻿import {useAppSelector} from "../../store/store";
 import React, {useEffect} from "react";
-import TableList from "./TableList";
-import {useAppSelector} from "../../store/store";
-import { buildTableColumnConfig } from "../../utillites/table/tableColumnConfigBuilder";
+import TableList from "../Table/TableList";
+import styles from "../Table/Table.module.css";
+import DataTable from "react-data-table-component";
+import {buildTableColumnConfig} from "../../utillites/table/tableColumnConfigBuilder";
 import {buildTableObject} from "../../utillites/table/tableObjectBuilder";
+import { customStyles } from "../Table/Table";
+import Uploader from "./Uploader";
 
-export const customStyles = {
-    headCells: {
-        style: {
-            paddingLeft: "8px", // override the cell padding for head cells
-            paddingRight: "8px",
-        },
-    },
-    cells: {
-        style: {
-            paddingLeft: "8px", // override the cell padding for data cells
-            paddingRight: "8px",
-        },
-    },
-}
-const data: any[] = DATA
-
-function Table(): JSX.Element {
+const Upload = () => {
     const workTable = useAppSelector((state) => state.workTable);
-
-    console.log(workTable);
 
     useEffect(() => {
     }, [workTable])
 
     return (
-        <div>
-            <table width={"100%"}>
-                <tbody>
+    <div>
+        <table width={"100%"}>
+            <tbody>
                 <tr>
                     <td>
                         <div>
@@ -56,10 +39,19 @@ function Table(): JSX.Element {
                         </div>
                     </td>
                 </tr>
-                </tbody>
-            </table>
-        </div>
-    )
+                <tr>
+                    <td>
+                        <div>
+                            <Uploader
+                                table={workTable.workTable}
+                            />
+                        </div>
+                    </td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>);
 }
 
-export default Table
+export default Upload

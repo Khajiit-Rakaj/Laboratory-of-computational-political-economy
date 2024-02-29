@@ -36,7 +36,7 @@ const NavTabs = () => {
   }
 
   useEffect(() => {
-    const pathToValueMap: PathToValueMap = { "/": 0, "/about": 1, "/login": 2 }
+    const pathToValueMap: PathToValueMap = { "/": 0, "/upload": 1, "/about": 2, "/login": 3 }
 
     setValue(pathToValueMap[pathname])
   }, [pathname, value])
@@ -50,6 +50,7 @@ const NavTabs = () => {
         textColor="secondary"
       >
         <Tab label="Home" component={Link} to="/" sx={styleTab} />
+        <Tab label="Upload" component={Link} to="/upload" sx={styleTab} />
         <Tab label="About" component={Link} to="/about" sx={styleTab} />
         <Tab label="Login" component={Link} to="/login" sx={styleTab} />
       </Tabs>

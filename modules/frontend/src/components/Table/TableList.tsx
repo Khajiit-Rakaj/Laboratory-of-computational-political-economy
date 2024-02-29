@@ -16,19 +16,18 @@ function TableList(): JSX.Element {
         tableDispatch(fetchTableData(e));
     }
 
-    const emptyOption = [<option key={-1}>{'Select work table'}</option>];
-
     return (
         <div>
             <select name="Tables" size={-1} onChange={e => setWorkTableState(e.target.value)}>
                 {!loading && tables
-                    ? emptyOption.concat(tables?.map(item => (
+                    ? <option>{'Select work table'}</option>
+                    : <option>{'pending data...'}</option>
+                }
+                {!loading && tables &&
+                    tables?.map(item => (
                         <option key={item.tableName} value={item.tableName}>
                             {item.tableName}({item.documentCount})
-                        </option>)))
-                    : <option>
-                        {'pending data...'}
-                    </option>
+                        </option>))
                 }
             </select>
         </div>

@@ -9,4 +9,6 @@ public interface IBaseRepository<TModel, TQuery>
     Task<TModel> GetAsync(string id);
     
     Task<IEnumerable<TModel>> SearchAsync(IQueryBuilder<TQuery> queryBuilder);
+
+    Task CreateAsync(IEnumerable<TModel> entities);
 }

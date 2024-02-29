@@ -15,5 +15,7 @@ public interface IBaseClient<TModel>
 
     Task<IEnumerable<TModel>> SearchAsync(object queryObject);
 
+    Task CreateAsync(IEnumerable<TModel> entities);
+
     Task<bool> CreateCollectionAsync();
 }

@@ -38,12 +38,17 @@ public abstract class BaseCouchBaseRepository<TModel, TQuery> : BaseRepository<T
         return Client.SearchAsync(query);
     }
 
-    private string GetPaging(TQuery queryBuilderQuery)
+    public async Task CreateAsync(IEnumerable<TModel> entities)
+    {
+        await Client.CreateAsync(entities);
+    }
+
+    private static string GetPaging(TQuery queryBuilderQuery)
     {
         return $" limit {queryBuilderQuery.PageSize} offset {queryBuilderQuery.PageSize * queryBuilderQuery.FromPage}";
     }
 
-    protected string GetReturnFields(IReturnFields returnFields)
+    private static string GetReturnFields(IReturnFields returnFields)
     {
         var returnFieldValues = returnFields != null
             ? string.Join(",",
