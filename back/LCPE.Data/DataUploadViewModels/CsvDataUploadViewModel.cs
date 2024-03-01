@@ -7,4 +7,6 @@ public class CsvDataUploadViewModel
     public string Model { get; set; }
 
     public List<KeyValuePair<string, string>> SourceDestinationPath { get; set; }
+
+    public string MetadataSource { get; set; }
 }

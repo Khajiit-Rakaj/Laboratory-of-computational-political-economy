@@ -1,6 +1,6 @@
 ﻿namespace LCPE.Data.Queries.ReturnFields;
 
-public class OrganisationReturnFields : BaseReturnFields
+public class OrganisationReturnFields : BaseMetadataReturnFields
 {
     
 }

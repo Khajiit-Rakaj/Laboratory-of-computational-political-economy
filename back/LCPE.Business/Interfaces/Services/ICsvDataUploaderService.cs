@@ -2,5 +2,5 @@
 
 public interface ICsvDataUploaderService
 {
-    Task<string> UploadDataAsync(string data, IDictionary<string, string> mapping, string entityTable);
+    Task<string> UploadDataAsync(string data, IDictionary<string, string> mapping, string entityTable, string metadata);
 }

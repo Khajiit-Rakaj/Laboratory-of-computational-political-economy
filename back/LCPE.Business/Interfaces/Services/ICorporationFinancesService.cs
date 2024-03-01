@@ -4,7 +4,6 @@ using LCPE.Data.Queries;
 
 namespace LCPE.Business.Interfaces.Services;
 
-public interface ICorporationFinancesService
+public interface ICorporationFinancesService : IDataEntityService<CorporationFinancesQuery>
 {
-    Task<WorkTableViewModel> GetWorkTableViewModel(IQueryBuilder<CorporationFinancesQuery> queryBuilder);
 }

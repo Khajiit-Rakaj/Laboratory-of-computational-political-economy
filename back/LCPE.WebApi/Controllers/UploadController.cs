@@ -21,7 +21,7 @@ public class UploadController : Controller
     {
         var result = csvDataUploaderService.UploadDataAsync(csvDataUploadViewModel.Data,
             csvDataUploadViewModel.SourceDestinationPath.ToDictionary(k => k.Key, v => v.Value),
-            csvDataUploadViewModel.Model);
+            csvDataUploadViewModel.Model, csvDataUploadViewModel.MetadataSource);
 
         return Ok(result);
     }

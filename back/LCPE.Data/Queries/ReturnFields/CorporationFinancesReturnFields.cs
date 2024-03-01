@@ -1,6 +1,6 @@
 ﻿namespace LCPE.Data.Queries.ReturnFields;
 
-public class CorporationFinancesReturnFields : BaseReturnFields
+public class CorporationFinancesReturnFields : BaseMetadataReturnFields
 {
     public bool Year { get; set; }
 

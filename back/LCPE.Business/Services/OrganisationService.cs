@@ -8,10 +8,10 @@ using LCPE.Interfaces.DataModels;
 
 namespace LCPE.Business.Services;
 
-public class CountryService : BaseDataEntityService<Country, CountryQuery, CountryReturnFields,
-    CountrySearchFields, CountrySortingFields>, ICountryService
+public class OrganisationService : BaseDataEntityService<Organisation, OrganisationQuery, OrganisationReturnFields,
+    OrganisationSearchFields, OrganisationSortingFields>, IOrganisationService
 {
-    public CountryService(ICountryRepository repository): base(repository)
+    public OrganisationService(IOrganisationRepository repository) : base(repository)
     {
     }
 }

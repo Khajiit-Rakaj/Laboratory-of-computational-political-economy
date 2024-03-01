@@ -8,6 +8,7 @@ interface UploadCsvDataProps{
     model: IWorkTableModel; 
     sourceDestinationPath: {[target: string]: string}; 
     data: string;
+    metadata: string;
 }
 
 interface Body{
@@ -29,7 +30,8 @@ export const uploadCsvData = createAsyncThunk('post/uploadData', async (props: U
             body: `{
                 "model": "${props.model.sourceTables[0]}",
                 "sourceDestinationPath": ${JSON.stringify(paths)},
-                "data": "${props.data.replaceAll('"', '\\"').replaceAll('\r\n', '\\n')}"
+                "data": "${props.data.replaceAll('"', '\\"').replaceAll('\r\n', '\\n')}",
+                "metadataSource": "${props.metadata}"
             }`
         });
     return await fetch(request)

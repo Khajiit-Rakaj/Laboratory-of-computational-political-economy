@@ -12,6 +12,7 @@ const Uploader = (props: UploaderProps) =>{
     const [cols, setCols] = useState<string[]>([]);
     const [data, setData] = useState<string>('');
     const [sourceDestinationPaths, setSourceDestinationPath] = useState<{[target: string]: string}>({});
+    const [metadata, setMetadata] = useState<string>('');
     const uploaderDispatch = useAppDispatch();
     
     const setPath = (target: string, source: string) =>{
@@ -24,13 +25,13 @@ const Uploader = (props: UploaderProps) =>{
     const onInputChange = (e: any) => {
         const file = e.target.files[0];
         
-        if (file && file.name.toLowerCase().endsWith('.csv')){
+        if (file?.name.toLowerCase().endsWith('.csv')){
             const fileReader = new FileReader();
             fileReader.onload = () => {
                 const fileContent = fileReader.result as string;
                 setData(fileContent);
                 const rows = fileContent.split('\r\n');
-                const columns = rows[0].split(',').map(s => s.replaceAll(/\"/g, ''));
+                const columns = rows[0].split(',').map(s => s.replaceAll(/"/g, ''));
                 setCols(columns);
 
                 console.log(columns);
@@ -50,7 +51,8 @@ const Uploader = (props: UploaderProps) =>{
     
     const colsSelect = (fieldName: string) => {
         return (
-            <select  name={fieldName} size={-1} onChange={e => setPath(fieldName, e.target.value)} defaultValue={cols && cols.length > 0 ? 'select source field name...' : 'upload file to parse field names...'}>
+            <select name={fieldName} size={-1} onChange={e => setPath(fieldName, e.target.value)}
+                    defaultValue={cols && cols.length > 0 ? 'select source field name...' : 'upload file to parse field names...'}>
                 <option disabled>
                     {cols && cols.length > 0 ? 'select source field name...' : 'upload file to parse field names...'}
                 </option>
@@ -61,10 +63,19 @@ const Uploader = (props: UploaderProps) =>{
             </select>
         )
     }
+
+    const metadataInput = () => {
+        return (
+            <div>
+                <p>Metadata</p>
+                <textarea key="metadata" onChange={(e) => setMetadata(e.target.value)}/>
+            </div>
+        );
+    }
     
     const uploadData = () => {
         if (data.length && table){
-            uploaderDispatch(uploadCsvData({data: data, model: table, sourceDestinationPath: sourceDestinationPaths}));            
+            uploaderDispatch(uploadCsvData({data: data, model: table, sourceDestinationPath: sourceDestinationPaths, metadata: metadata}));            
         }
     }
     
@@ -76,6 +87,7 @@ const Uploader = (props: UploaderProps) =>{
                     {!!table && table.fields.map(f => sourceDestinationRow(f.name))}
                 </tbody>
             </table>
+            {!!table && table.fields.find(x => x.name.toLowerCase() === 'metadata') && metadataInput()}
             <button disabled={!table || !data.length} onClick={() => uploadData()}>Upload</button>
         </div>
     );
