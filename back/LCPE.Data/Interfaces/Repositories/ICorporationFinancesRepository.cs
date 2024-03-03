@@ -3,7 +3,7 @@ using LCPE.Interfaces.DataModels;
 
 namespace LCPE.Data.Interfaces.Repositories;
 
-public interface ICorporationFinancesRepository : IBaseRepository<CorporationFinances, CorporationFinancesQuery>
+public interface ICorporationFinancesRepository : IBaseRepository<CorporationFinancesData, CorporationFinancesQuery>
 {
     
 }

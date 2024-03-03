@@ -32,23 +32,23 @@ public class TestsForCountryRepositoryContext : BaseTestsContext
 
     public TestsForCountryRepositoryContext SetupClientSearch(string query = "")
     {
-        MockService<ICouchBaseClient<Country>, Task<IEnumerable<Country>>>(
+        MockService<ICouchBaseClient<CountryData>, Task<IEnumerable<CountryData>>>(
             x => x.SearchAsync(It.Is<object>(q => q.ToString() == query)),
-            Task.FromResult(List.Create<Country>() as IEnumerable<Country>));
+            Task.FromResult(List.Create<CountryData>() as IEnumerable<CountryData>));
 
-        MockService<ICouchBaseClient<Country>, Task<IEnumerable<Country>>>(
-            x => x.SearchAsync(It.IsAny<object>()), Task.FromResult(List.Create<Country>() as IEnumerable<Country>));
+        MockService<ICouchBaseClient<CountryData>, Task<IEnumerable<CountryData>>>(
+            x => x.SearchAsync(It.IsAny<object>()), Task.FromResult(List.Create<CountryData>() as IEnumerable<CountryData>));
 
-        MockService<ICouchBaseClient<Country>, string>(
+        MockService<ICouchBaseClient<CountryData>, string>(
             x => x.TablePlaceHolder, "table_place_holder");
 
         return this;
     }
 
-    public ICouchBaseClientFactory<Country> MockClientFactory()
+    public ICouchBaseClientFactory<CountryData> MockClientFactory()
     {
-        var client = Mocker.Mock<ICouchBaseClient<Country>>();
-        var factory = Mocker.Mock<ICouchBaseClientFactory<Country>>();
+        var client = Mocker.Mock<ICouchBaseClient<CountryData>>();
+        var factory = Mocker.Mock<ICouchBaseClientFactory<CountryData>>();
         factory.Setup(x =>
                 x.CreateAsync(It.IsAny<ConnectionConfiguration>(), It.IsAny<IndexConfiguration>(), It.IsAny<ILog>()))
             .Returns(Task.FromResult(client.Object));

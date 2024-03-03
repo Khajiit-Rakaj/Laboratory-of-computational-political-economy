@@ -9,7 +9,7 @@ using LCPE.Interfaces.DataModels;
 namespace LCPE.Business.Services;
 
 public class CorporationFinancesService :
-    BaseDataEntityService<CorporationFinances, CorporationFinancesQuery, CorporationFinancesReturnFields,
+    BaseDataEntityService<CorporationFinancesData, CorporationFinancesQuery, CorporationFinancesReturnFields,
         CorporationFinancesSearchFields, CorporationFinancesSortingFields>, ICorporationFinancesService
 {
     public CorporationFinancesService(ICorporationFinancesRepository repository) : base(repository)

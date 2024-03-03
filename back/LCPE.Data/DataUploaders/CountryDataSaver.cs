@@ -4,7 +4,7 @@ using LCPE.Interfaces.DataModels;
 
 namespace LCPE.Data.DataUploaders;
 
-public class CountryDataSaver : BaseEntityDataSaver<Country, CountryQuery>
+public class CountryDataSaver : BaseEntityDataSaver<CountryData, CountryQuery>
 {
     public CountryDataSaver(ICountryRepository repository) : base(repository)
     {

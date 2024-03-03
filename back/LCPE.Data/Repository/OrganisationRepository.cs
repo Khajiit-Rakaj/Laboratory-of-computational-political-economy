@@ -8,15 +8,15 @@ using log4net;
 
 namespace LCPE.Data.Repository;
 
-public class OrganisationRepository : BaseCouchBaseRepository<Organisation, OrganisationQuery>, IOrganisationRepository,
+public class OrganisationRepository : BaseCouchBaseRepository<OrganisationData, OrganisationQuery>, IOrganisationRepository,
     ICheckableRepository
 {
-    public OrganisationRepository(ICouchBaseClientFactory<Organisation> clientFactory, CouchBaseConfiguration options,
+    public OrganisationRepository(ICouchBaseClientFactory<OrganisationData> clientFactory, CouchBaseConfiguration options,
         ILog log) : base(clientFactory, options, log)
     {
     }
 
-    public Task<Organisation> GetAsync(string id)
+    public Task<OrganisationData> GetAsync(string id)
     {
         return Client.GetAsync(id);
     }

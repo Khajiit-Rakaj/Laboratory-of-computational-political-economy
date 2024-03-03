@@ -9,14 +9,14 @@ using log4net;
 
 namespace LCPE.Data.Repository;
 
-public class CountryRepository : BaseCouchBaseRepository<Country, CountryQuery>, ICountryRepository, ICheckableRepository
+public class CountryRepository : BaseCouchBaseRepository<CountryData, CountryQuery>, ICountryRepository, ICheckableRepository
 {
-    public CountryRepository(ICouchBaseClientFactory<Country> clientFactory, CouchBaseConfiguration options, ILog log) :
+    public CountryRepository(ICouchBaseClientFactory<CountryData> clientFactory, CouchBaseConfiguration options, ILog log) :
         base(clientFactory, options, log)
     {
     }
 
-    public Task<Country> GetAsync(string id)
+    public Task<CountryData> GetAsync(string id)
     {
         return Client.GetAsync(id);
     }

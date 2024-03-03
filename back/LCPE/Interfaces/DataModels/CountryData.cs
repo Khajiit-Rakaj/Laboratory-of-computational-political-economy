@@ -5,7 +5,7 @@ using LCPE.Interfaces.Enums;
 namespace LCPE.Interfaces.DataModels;
 
 [CouchBaseRelation(DataConstants.Country)]
-public class Country : DataEntity
+public class CountryData : DataEntity
 {
     [PresentableField(DataType.StringValue)]
     public string Name { get; set; }

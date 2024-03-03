@@ -7,5 +7,9 @@ public enum DataType
     FloatPointValue,
     DateValue,
     CompoundValue,
-    Metadata
+    Metadata,
+    BigIntValue,
+    StringArrayValue,
+    HistoricalDataArrayValue,
+    MaternalSharingArrayValue
 }

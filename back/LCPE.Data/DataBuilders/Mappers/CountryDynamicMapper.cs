@@ -2,7 +2,7 @@
 
 namespace LCPE.Data.DataBuilders.Mappers;
 
-public class CountryDynamicMapper: BaseDynamicMapper<Country>
+public class CountryDynamicMapper: BaseDynamicMapper<CountryData>
 {
     public CountryDynamicMapper()
     {
@@ -10,9 +10,9 @@ public class CountryDynamicMapper: BaseDynamicMapper<Country>
 
     protected override void CreateMapping(IDictionary<string, string> mappingConfiguration)
     {
-        Map(o => o.Id).Name(mappingConfiguration[nameof(Country.ShortName)]);
-        Map(o => o.ShortName).Name(mappingConfiguration[nameof(Country.ShortName)]);
-        Map(o => o.Name).Name(mappingConfiguration[nameof(Country.Name)]);
-        Map(o => o.Capital).Name(mappingConfiguration[nameof(Country.Capital)]);
+        Map(o => o.Id).Name(mappingConfiguration[nameof(CountryData.ShortName)]);
+        Map(o => o.ShortName).Name(mappingConfiguration[nameof(CountryData.ShortName)]);
+        Map(o => o.Name).Name(mappingConfiguration[nameof(CountryData.Name)]);
+        Map(o => o.Capital).Name(mappingConfiguration[nameof(CountryData.Capital)]);
     }
 }

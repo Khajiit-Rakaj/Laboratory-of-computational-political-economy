@@ -8,7 +8,7 @@ using LCPE.Interfaces.DataModels;
 
 namespace LCPE.Business.Services;
 
-public class OrganisationService : BaseDataEntityService<Organisation, OrganisationQuery, OrganisationReturnFields,
+public class OrganisationService : BaseDataEntityService<OrganisationData, OrganisationQuery, OrganisationReturnFields,
     OrganisationSearchFields, OrganisationSortingFields>, IOrganisationService
 {
     public OrganisationService(IOrganisationRepository repository) : base(repository)

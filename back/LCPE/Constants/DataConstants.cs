@@ -5,7 +5,11 @@ public static class DataConstants
     public const string Tables = "_default";
     public const string Country = "countries";
     public const string CorporateFinance = "corporate_finance";
-    public const string Organisation = "organisation";
+    public const string Organisation = "organisations";
+    public const string Currency = "currencies";
+    public const string CurrencyConversionRatio = "currency_conversion_ratios";
+    public const string Resource = "resources";
+    public const string Product = "products";
 
     public const string Upload = "Upload";
 

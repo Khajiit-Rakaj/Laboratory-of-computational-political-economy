@@ -5,6 +5,6 @@ using LCPE.Interfaces.DataModels;
 
 namespace LCPE.Data.Queries;
 
-public class CorporationFinancesQuery : BaseQuery <CorporationFinances, CorporationFinancesReturnFields, CorporationFinancesSearchFields, CorporationFinancesSortingFields>
+public class CorporationFinancesQuery : BaseQuery <CorporationFinancesData, CorporationFinancesReturnFields, CorporationFinancesSearchFields, CorporationFinancesSortingFields>
 {
 }

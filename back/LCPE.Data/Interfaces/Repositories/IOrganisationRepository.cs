@@ -3,7 +3,7 @@ using LCPE.Interfaces.DataModels;
 
 namespace LCPE.Data.Interfaces.Repositories;
 
-public interface IOrganisationRepository : IBaseRepository<Organisation, OrganisationQuery>
+public interface IOrganisationRepository : IBaseRepository<OrganisationData, OrganisationQuery>
 {
     
 }

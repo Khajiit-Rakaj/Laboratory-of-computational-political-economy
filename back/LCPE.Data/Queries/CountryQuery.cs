@@ -5,6 +5,6 @@ using LCPE.Interfaces.DataModels;
 
 namespace LCPE.Data.Queries;
 
-public class CountryQuery : BaseQuery <Country, CountryReturnFields, CountrySearchFields, CountrySortingFields>
+public class CountryQuery : BaseQuery <CountryData, CountryReturnFields, CountrySearchFields, CountrySortingFields>
 {
 }
