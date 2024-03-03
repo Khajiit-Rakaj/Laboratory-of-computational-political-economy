@@ -42,8 +42,4 @@ const AuthWrapper: React.FC<AuthWrapperProps> = ({ children }) => (
   </Box>
 )
 
-AuthWrapper.propTypes = {
-  children: PropTypes.node,
-}
-
 export default AuthWrapper
