@@ -18,6 +18,10 @@ public class DataModule : Module
         builder.RegisterType<CountryRepository>().As<ICountryRepository>();
         builder.RegisterType<CorporationFinancesRepository>().As<ICorporationFinancesRepository>();
         builder.RegisterType<OrganisationRepository>().As<IOrganisationRepository>();
+        builder.RegisterType<CurrencyRepository>().As<ICurrencyRepository>();
+        builder.RegisterType<CurrencyConversionRatioRepository>().As<ICurrencyConversionRatioRepository>();
+        builder.RegisterType<ProductRepository>().As<IProductRepository>();
+        builder.RegisterType<ResourceRepository>().As<IResourceRepository>();
         builder.RegisterImplementations<IDynamicDataMapper>();
         builder.RegisterImplementations<IEntityDataSaver>();
     }

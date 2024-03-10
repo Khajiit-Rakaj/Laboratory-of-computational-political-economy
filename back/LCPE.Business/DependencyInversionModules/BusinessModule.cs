@@ -13,6 +13,10 @@ public class BusinessModule : Module
         builder.RegisterType<CorporationFinancesService>().As<ICorporationFinancesService>();
         builder.RegisterType<OrganisationService>().As<IOrganisationService>();
         builder.RegisterType<CsvDataUploaderService>().As<ICsvDataUploaderService>();
+        builder.RegisterType<CurrencyService>().As<ICurrencyService>();
+        builder.RegisterType<CurrencyConversionRatioService>().As<ICurrencyConversionRatioService>();
+        builder.RegisterType<ProductService>().As<IProductService>();
+        builder.RegisterType<ResourceService>().As<IResourceService>();
     }
 
 }

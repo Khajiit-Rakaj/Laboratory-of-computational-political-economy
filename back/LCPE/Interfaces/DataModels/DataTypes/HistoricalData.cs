@@ -5,5 +5,10 @@
         public string Info { get; set; }
 
         public DateTime Date { get; set; }
+
+        public override string ToString()
+        {
+            return Date.ToString() + "," + Info;
+        }
     }
 }

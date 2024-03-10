@@ -7,5 +7,10 @@
         public int Num {  get; set; }
 
         public DateTime Date { get; set; }
+
+        public override string ToString()
+        {
+            return Date.ToString() + "," + Info + "," + Num;
+        }
     }
 }
