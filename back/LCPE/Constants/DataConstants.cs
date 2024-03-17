@@ -10,6 +10,7 @@ public static class DataConstants
     public const string CurrencyConversionRatio = "currency_conversion_ratios";
     public const string Resource = "resources";
     public const string Product = "products";
+    public const string MetadataSource = "metadata_source";
 
     public const string Upload = "Upload";
 

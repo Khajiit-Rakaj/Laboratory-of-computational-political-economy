@@ -19,7 +19,7 @@ public class UploadController : Controller
     [Route("CsvUpload")]
     public async Task<IActionResult> CsvUpload([FromBody] CsvDataUploadViewModel csvDataUploadViewModel)
     {
-        var result = csvDataUploaderService.UploadDataAsync(csvDataUploadViewModel.Data,
+        var result = await csvDataUploaderService.UploadDataAsync(csvDataUploadViewModel.Data,
             csvDataUploadViewModel.SourceDestinationPath.ToDictionary(k => k.Key, v => v.Value),
             csvDataUploadViewModel.Model, csvDataUploadViewModel.MetadataSource);
 

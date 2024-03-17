@@ -36,7 +36,7 @@ export const uploadCsvData = createAsyncThunk('post/uploadData', async (props: U
         });
     return await fetch(request)
         .then(res => {
-            return res as unknown as string;
+            return res.text() as unknown as string;
         });
 });
 

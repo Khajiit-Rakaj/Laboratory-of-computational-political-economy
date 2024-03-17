@@ -1,6 +1,6 @@
 ﻿import {IWorkTableModel} from "../../models/IWorkTableModel";
 import React, {useState} from "react";
-import {useAppDispatch} from "../../store/store";
+import {useAppDispatch, useAppSelector} from "../../store/store";
 import {uploadCsvData} from "../../reducers/dataUploaderReducer";
 
 interface UploaderProps{
@@ -14,7 +14,8 @@ const Uploader = (props: UploaderProps) =>{
     const [sourceDestinationPaths, setSourceDestinationPath] = useState<{[target: string]: string}>({});
     const [metadata, setMetadata] = useState<string>('');
     const uploaderDispatch = useAppDispatch();
-    
+    const dataUploader = useAppSelector((state) => state.dataUploader);
+
     const setPath = (target: string, source: string) =>{
         const state = sourceDestinationPaths;
         state[target] = source;
@@ -89,6 +90,7 @@ const Uploader = (props: UploaderProps) =>{
             </table>
             {!!table && table.fields.find(x => x.name.toLowerCase() === 'metadata') && metadataInput()}
             <button disabled={!table || !data.length} onClick={() => uploadData()}>Upload</button>
+            {dataUploader.loading ? <div>Uploading</div> : <div>{dataUploader?.uploadResult}</div>}
         </div>
     );
 }

@@ -25,7 +25,7 @@ public class BaseDataEntityService<TModel, TQuery, TReturnFields, TSearchFields,
         this.repository = repository;
     }
     
-    public async Task<TModel> GetAsync(string id)
+    public async Task<TModel?> GetAsync(string id)
     {
         return await repository.GetAsync(id);
     }

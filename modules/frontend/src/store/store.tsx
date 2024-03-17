@@ -3,12 +3,14 @@ import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
 
 import tableReducer from '../reducers/tableReducer'
 import workTableReducer from "../reducers/workTableReducer";
+import dataUploaderReducer from "../reducers/dataUploaderReducer";
 
 
 const store = configureStore({
     reducer: {
         tables: tableReducer,
-        workTable: workTableReducer
+        workTable: workTableReducer,
+        dataUploader: dataUploaderReducer
     }
 })
 

@@ -18,6 +18,7 @@ public class DataModule : Module
         builder.RegisterType<CountryRepository>().As<ICountryRepository>();
         builder.RegisterType<CorporationFinancesRepository>().As<ICorporationFinancesRepository>();
         builder.RegisterType<OrganisationRepository>().As<IOrganisationRepository>();
+        builder.RegisterType<MetadataSourceRepository>().As<IMetadataSourceRepository>();
         builder.RegisterImplementations<IDynamicDataMapper>();
         builder.RegisterImplementations<IEntityDataSaver>();
     }

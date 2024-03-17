@@ -6,7 +6,7 @@ namespace LCPE.Interfaces.DataModels;
 
 public abstract class DataEntityWithMetadata : DataEntity
 {
-    [ServiceField(DataType.Metadata)]
+    [PresentableField(DataType.Metadata)]
     public Metadata Metadata { get; set; }
 
     [ServiceField(DataType.IntValue)]

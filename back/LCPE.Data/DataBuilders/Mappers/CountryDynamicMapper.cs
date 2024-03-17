@@ -2,12 +2,8 @@
 
 namespace LCPE.Data.DataBuilders.Mappers;
 
-public class CountryDynamicMapper: BaseDynamicMapper<CountryData>
+public class CountryDynamicMapper : BaseDynamicMapper<CountryData>
 {
-    public CountryDynamicMapper()
-    {
-    }
-
     protected override void CreateMapping(IDictionary<string, string> mappingConfiguration)
     {
         Map(o => o.Id).Name(mappingConfiguration[nameof(CountryData.ShortName)]);

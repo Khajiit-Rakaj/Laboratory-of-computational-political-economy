@@ -1,18 +1,20 @@
 ﻿using LCPE.Business.Interfaces.Services;
 using LCPE.Data.Interfaces;
 using LCPE.Data.QueryBuilders.Couchbase;
+using LCPE.Interfaces.DataModels;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
 
-public class BaseQueryController<TQuery> : Controller
+public class BaseQueryController<TModel, TQuery> : Controller
+    where TModel : DataEntity
     where TQuery : IQuery
 {
-    private readonly IDataEntityService<TQuery> countryService;
+    private readonly IDataEntityService<TModel, TQuery> service;
 
-    public BaseQueryController(IDataEntityService<TQuery> countryService)
+    public BaseQueryController(IDataEntityService<TModel, TQuery> service)
     {
-        this.countryService = countryService;
+        this.service = service;
     }
     
     [HttpPost]
@@ -21,7 +23,7 @@ public class BaseQueryController<TQuery> : Controller
     {
         var queryBuilder = CouchBaseQueryBuilder<TQuery>.Create();
         
-        var result = await countryService.GetWorkTableViewModel(queryBuilder);
+        var result = await service.GetWorkTableViewModel(queryBuilder);
 
         return Ok(result);
     }

@@ -109,7 +109,13 @@ public class CouchBaseClient<TModel> : ICouchBaseClient<TModel>
 
     public async Task CreateAsync(IEnumerable<TModel> entities)
     {
-        await entities.ToAsyncEnumerable()
+        var entitiesWithId = entities.Select(x =>
+        {
+            x.Id ??= Guid.NewGuid().ToString();
+            return x;
+        });
+        
+        await entitiesWithId.ToAsyncEnumerable()
             .ForEachAwaitAsync(entity => collection.InsertAsync(entity.Id ?? Guid.NewGuid().ToString(), entity));
     }
 

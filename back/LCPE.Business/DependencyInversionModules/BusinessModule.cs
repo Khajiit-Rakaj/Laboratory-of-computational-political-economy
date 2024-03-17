@@ -12,6 +12,7 @@ public class BusinessModule : Module
         builder.RegisterType<CountryService>().As<ICountryService>();
         builder.RegisterType<CorporationFinancesService>().As<ICorporationFinancesService>();
         builder.RegisterType<OrganisationService>().As<IOrganisationService>();
+        builder.RegisterType<MetadataSourceService>().As<IMetadataSourceService>();
         builder.RegisterType<CsvDataUploaderService>().As<ICsvDataUploaderService>();
     }
 

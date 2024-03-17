@@ -3,6 +3,6 @@ using LCPE.Interfaces.DataModels;
 
 namespace LCPE.Business.Interfaces.Services;
 
-public interface ICountryService : IDataEntityService<CountryData, CountryQuery>
+public interface IMetadataSourceService :  IDataEntityService<MetadataSource, MetadataSourceQuery>
 {
 }

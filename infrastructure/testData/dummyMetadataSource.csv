@@ -1,0 +1,4 @@
+Name,Description,ReliabilityLevel
+"unrated dummy data","typical unrated dummy data","Undefined"
+"unreliable dummy data 1","typical unreliable dummy data","Low"
+"reliable dummy data","typical reliable dummy data","High"
