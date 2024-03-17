@@ -61,11 +61,11 @@ public static class CouchBaseInfrastructureHelper
         var collectionManager = cbBucket.Collections;
         var cbScopes = (await collectionManager.GetAllScopesAsync()).ToList();
 
-        if (cbScopes.Exists(x => x.Name == scopeName) && cbScopes.Find(x => x.Name == scopeName).Collections
-                .All(x => x.Name != indexName))
+        if (cbScopes.Exists(x => x.Name == scopeName) && 
+            cbScopes.Find(x => x.Name == scopeName).Collections.All(x => x.Name != indexName))
         {
             await collectionManager.CreateCollectionAsync(new CollectionSpec(scopeName, indexName));
-            await cbBucket.WaitUntilReadyAsync(TimeSpan.FromMilliseconds(DefaultDelay)).WaitAsync(TimeSpan.FromMilliseconds(DefaultDelay));
+            await Task.Delay(TimeSpan.FromMilliseconds(DefaultDelay));
             cbCollection = await cbBucket.CollectionAsync(indexName);
             await cbCollection.QueryIndexes.CreatePrimaryIndexAsync(new CreatePrimaryQueryIndexOptions());
         }
